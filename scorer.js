@@ -2,9 +2,10 @@
  * next-best-job — Scoring Engine
  *
  * Takes a raw job listing and returns a score 0–100.
- * Score = 0 means disqualified (failed a must-have).
- * Score = 45 means passed must-haves, zero nice-to-haves matched.
- * Score = 100 means passed all must-haves + all nice-to-haves.
+ *
+ * Score = 0   → disqualified (failed a must-have)
+ * Score = 45  → passed all must-haves, zero nice-to-haves matched
+ * Score = 100 → all must-haves + all nice-to-haves matched
  *
  * Usage:
  *   const { score, reasons, voice, resumeTrack } = scoreJob(job, CRITERIA);
@@ -13,59 +14,59 @@
 function scoreJob(job, criteria) {
   const reasons = { pass: [], fail: [], bonus: [] };
 
-  // ── 1. MUST-HAVES ──────────────────────────────────────────────────────────
+  // ── 1. MUST-HAVES — fail fast ─────────────────────────────────────────
 
-  // Salary check
   const salary = extractSalary(job.salary || job.compensation || "");
   if (salary && salary < criteria.mustHave.minSalaryUSD) {
-    reasons.fail.push(`Salary ${fmtSalary(salary)} below floor ${fmtSalary(criteria.mustHave.minSalaryUSD)}`);
+    reasons.fail.push(`Salary ${fmt(salary)} below floor ${fmt(criteria.mustHave.minSalaryUSD)}`);
     return { score: 0, reasons, disqualified: true, voice: null, resumeTrack: null };
   }
-  if (salary) reasons.pass.push(`Salary ${fmtSalary(salary)} meets floor`);
+  if (salary) reasons.pass.push(`Salary ${fmt(salary)} clears floor`);
 
-  // Location check
-  const locationStr = (job.location || job.jobLocation?.displayName || "").toLowerCase();
-  const locationOk = criteria.mustHave.locations.some(l => locationStr.includes(l.toLowerCase()));
-  if (!locationOk) {
+  const loc = (job.location || job.jobLocation?.displayName || "").toLowerCase();
+  const locOk = criteria.mustHave.locations.some(l => loc.includes(l.toLowerCase()));
+  if (!locOk) {
     reasons.fail.push(`Location "${job.location}" not in target list`);
     return { score: 0, reasons, disqualified: true, voice: null, resumeTrack: null };
   }
-  reasons.pass.push(`Location "${job.location}" is valid`);
+  reasons.pass.push(`Location "${job.location}" valid`);
 
-  // AI core check — simple keyword scan on title + summary
   const text = ((job.title || "") + " " + (job.summary || "") + " " + (job.description || "")).toLowerCase();
-  const aiKeywords = ["ai", "ml", "machine learning", "generative", "genai", "llm", "artificial intelligence", "nlp"];
-  const aiMatch = aiKeywords.some(k => text.includes(k));
-  if (criteria.mustHave.aiCoreTo_Role && !aiMatch) {
-    reasons.fail.push("Role does not appear to be AI/ML focused");
+  const aiWords = ["ai", "ml", "machine learning", "generative", "genai", "llm", "artificial intelligence", "nlp"];
+  if (criteria.mustHave.aiCoreToRole && !aiWords.some(w => text.includes(w))) {
+    reasons.fail.push("Role not AI/ML focused");
     return { score: 0, reasons, disqualified: true, voice: null, resumeTrack: null };
   }
-  if (aiMatch) reasons.pass.push("AI/ML keywords found in role");
+  reasons.pass.push("AI/ML keywords found");
 
-  // ── 2. BASE SCORE ──────────────────────────────────────────────────────────
-  // Passed all must-haves → start at 45
+  // ── 2. BASE SCORE ─────────────────────────────────────────────────────
+
   let score = 45;
 
-  // ── 3. NICE-TO-HAVES ───────────────────────────────────────────────────────
+  // ── 3. NICE-TO-HAVES ─────────────────────────────────────────────────
+
   const company = (job.company || job.companyName || "").toLowerCase();
 
   for (const nic of criteria.niceToHave) {
     let matched = false;
 
     if (nic.id === "tier1") {
-      matched = nic.companies.some(c => company.includes(c.toLowerCase()));
-    } else if (nic.id === "h1b") {
-      matched = job.willingToSponsor === true ||
-        text.includes("sponsor") || text.includes("h-1b") || text.includes("h1b");
+      matched = (nic.companies || []).some(c => company.includes(c.toLowerCase()));
+    } else if (nic.id === "workauth") {
+      matched = text.includes("sponsor") || text.includes("work authoriz") ||
+        text.includes("h-1b") || text.includes("h1b") || job.willingToSponsor === true;
     } else if (nic.id === "bonus") {
-      matched = text.includes("bonus") && (text.includes("30,000") || text.includes("$30k") ||
-        extractSalary(text) >= 30000);
+      matched = text.includes("bonus");
     } else if (nic.id === "tuition") {
       matched = text.includes("tuition") || text.includes("education reimbursement") ||
         text.includes("learning stipend");
     } else if (nic.id === "latam") {
-      matched = text.includes("latin america") || text.includes("latam") ||
-        text.includes("latin american") || locationStr.includes("miami");
+      matched = text.includes("latin america") || text.includes("latam");
+    }
+
+    // Generic fallback for custom criteria added by the user
+    if (!matched && nic.keywords) {
+      matched = nic.keywords.some(k => text.includes(k.toLowerCase()));
     }
 
     if (matched) {
@@ -74,50 +75,40 @@ function scoreJob(job, criteria) {
     }
   }
 
-  score = Math.min(100, score);
-
-  // ── 4. VOICE + RESUME TRACK ────────────────────────────────────────────────
-  const voice = detectVoice(job, criteria);
-  const resumeTrack = detectResumeTrack(job, criteria);
-
-  return { score, reasons, disqualified: false, voice, resumeTrack };
+  return {
+    score: Math.min(100, score),
+    reasons,
+    disqualified: false,
+    voice: detectVoice(job),
+    resumeTrack: detectResumeTrack(job),
+  };
 }
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
+// ── HELPERS ───────────────────────────────────────────────────────────────
 
 function extractSalary(str) {
   if (!str) return null;
-  // Handle ranges like "$180,000 - $220,000" → take the lower
   const matches = str.replace(/,/g, "").match(/\$?(\d{5,7})/g);
   if (!matches) return null;
-  const nums = matches.map(m => parseInt(m.replace(/\$/g, "")));
-  return Math.min(...nums);
+  return Math.min(...matches.map(m => parseInt(m.replace(/\$/g, ""))));
 }
 
-function fmtSalary(n) {
-  return "$" + (n / 1000).toFixed(0) + "K";
+function fmt(n) {
+  return "$" + (n >= 1000000 ? (n / 1000000).toFixed(1) + "M" : (n / 1000).toFixed(0) + "K");
 }
 
-function detectVoice(job, criteria) {
-  const text = ((job.title || "") + " " + (job.company || "")).toLowerCase();
-  const startupSignals = ["startup", "series a", "series b", "early stage", "seed"];
-  const isStartup = startupSignals.some(s => text.includes(s)) ||
-    (job.companySize && job.companySize < 200);
-  return isStartup ? "startup" : "enterprise";
+function detectVoice(job) {
+  const t = ((job.title || "") + " " + (job.company || "")).toLowerCase();
+  return ["startup", "series a", "series b", "early stage", "seed"].some(s => t.includes(s))
+    ? "startup" : "enterprise";
 }
 
-function detectResumeTrack(job, criteria) {
-  const title = (job.title || "").toLowerCase();
-  if (title.includes("program manager") || title.includes("tpm") || title.includes("delivery")) {
-    return "tpm";
-  }
-  if (title.includes("product manager") || title.includes(" pm ") || title.includes("cpo")) {
-    return "aipm";
-  }
+function detectResumeTrack(job) {
+  const t = (job.title || "").toLowerCase();
+  if (t.includes("program manager") || t.includes("tpm") || t.includes("delivery")) return "tpm";
+  if (t.includes("product manager") || t.includes(" pm ")) return "aipm";
   return "strategist";
 }
-
-// ── BATCH SCORER ─────────────────────────────────────────────────────────────
 
 function scoreJobs(jobs, criteria) {
   return jobs
@@ -126,6 +117,4 @@ function scoreJobs(jobs, criteria) {
     .sort((a, b) => b.score - a.score);
 }
 
-if (typeof module !== 'undefined') {
-  module.exports = { scoreJob, scoreJobs };
-}
+if (typeof module !== "undefined") module.exports = { scoreJob, scoreJobs };

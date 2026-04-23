@@ -1,66 +1,48 @@
 /**
  * next-best-job — Scoring Criteria
  *
- * This file defines how roles are scored. Edit this to match your own
- * target profile. The agent uses these weights to rank every role it finds.
+ * This is the PUBLIC version. It shows how the scoring engine works.
+ * Fork this repo and edit these values to match your own profile.
  *
- * Must-haves: disqualify any role that fails these.
- * Nice-to-haves: add points up to a max of 100.
+ * Your real criteria, pipeline, and applications live in your private
+ * dashboard (encrypted localStorage) — nothing personal is in this file.
  */
 
 const CRITERIA = {
 
-  // ── MUST-HAVES ─────────────────────────────────────────────────────────────
+  // ── MUST-HAVES ─────────────────────────────────────────────────────────
   // Any role that fails a must-have gets score = 0 and is not shown.
 
   mustHave: {
-    minSalaryUSD: 180000,          // Base salary floor
+    minSalaryUSD: 180000,          // Set your salary floor
     locations: ["New York", "NYC", "Remote"],
     maxOfficeDaysPerWeek: 3,       // Hybrid ceiling
-    requiresNoSponsorship: true,   // L-2 EAD covers this; set false if you have H-1B
-    aiCoreTo Role: true,           // Role must be AI/ML/GenAI focused
     fullTimeOnly: true,
+    aiCoreToRole: true,            // AI/ML/GenAI must be central to the role
   },
 
-  // ── NICE-TO-HAVES ──────────────────────────────────────────────────────────
-  // Each adds points to the score. Max total from nice-to-haves = 55.
+  // ── NICE-TO-HAVES ──────────────────────────────────────────────────────
+  // Each adds points. Base score = 45 (passed must-haves). Max = 100.
 
   niceToHave: [
     {
       id: "tier1",
       label: "Tier 1 company",
-      description: "Google, Anthropic, AWS, Microsoft, OpenAI",
+      description: "Top target companies — highest priority",
       points: 15,
       companies: ["Google", "Anthropic", "AWS", "Amazon", "Microsoft", "OpenAI", "DeepMind"],
     },
     {
-      id: "h1b",
-      label: "H-1B sponsorship offered",
-      description: "Company willing to sponsor H-1B after OPT",
+      id: "workauth",
+      label: "Work authorization support",
+      description: "Company willing to support work authorization continuity",
       points: 15,
     },
-    {
-      id: "bonus",
-      label: "Bonus ≥ $30K",
-      description: "Annual performance bonus at or above $30,000",
-      points: 10,
-    },
-    {
-      id: "tuition",
-      label: "Tuition reimbursement",
-      description: "Company pays for continued education (~$150K)",
-      points: 10,
-    },
-    {
-      id: "latam",
-      label: "LATAM market exposure",
-      description: "Role involves Latin American market or clients",
-      points: 5,
-    },
+    // Add your own nice-to-haves here — bonus threshold, tuition, location perks, etc.
+    // Each one gets an id, label, description, and points value.
   ],
 
-  // ── ROLE TYPES ─────────────────────────────────────────────────────────────
-  // What to search for. Add or remove as needed.
+  // ── ROLE TYPES TO SCAN ─────────────────────────────────────────────────
 
   roleTypes: [
     "Technical Program Manager AI",
@@ -70,42 +52,40 @@ const CRITERIA = {
     "Strategic Projects AI",
   ],
 
-  // ── COVER LETTER VOICE ─────────────────────────────────────────────────────
-  // Determines tone of generated cover letters.
+  // ── COVER LETTER VOICE ─────────────────────────────────────────────────
 
   coverLetterVoice: {
     enterprise: {
       label: "Enterprise delivery",
       useFor: ["big tech", "financial services", "consulting", "Fortune 500"],
-      tone: "Expert operator — lead with cross-functional execution, scale, and reliability. 3 paragraphs, metrics-first.",
+      tone: "Expert operator — lead with cross-functional execution, scale, and reliability.",
     },
     startup: {
       label: "Founder-operator",
       useFor: ["startup", "early-stage", "Series A", "Series B"],
-      tone: "Builder — lead with ownership, 0-to-1 experience, and comfort with ambiguity. Show you'll run toward problems.",
+      tone: "Builder — lead with ownership, 0-to-1 experience, and comfort with ambiguity.",
     },
   },
 
-  // ── RESUME TRACKS ──────────────────────────────────────────────────────────
+  // ── RESUME TRACKS ──────────────────────────────────────────────────────
 
   resumeTracks: {
     tpm: {
       label: "TPM / Delivery Manager",
-      bestFor: ["Technical Program Manager", "Delivery Manager", "Engineering Program Manager"],
-      emphasis: ["dependency mapping", "milestone tracking", "risk mitigation", "distributed team management"],
+      bestFor: ["Technical Program Manager", "Delivery Manager"],
+      emphasis: ["dependency mapping", "milestone tracking", "risk mitigation"],
     },
     aipm: {
       label: "AI Product Manager",
-      bestFor: ["AI Product Manager", "Senior PM", "Product Lead"],
-      emphasis: ["0-to-1 product", "GenAI deployment", "user research", "roadmap ownership"],
+      bestFor: ["AI Product Manager", "Senior PM"],
+      emphasis: ["0-to-1 product", "GenAI deployment", "roadmap ownership"],
     },
     strategist: {
       label: "Enterprise AI Strategist",
-      bestFor: ["AI Strategist", "Strategic Projects", "Enterprise AI"],
-      emphasis: ["enterprise relationships", "AI deployment at scale", "cross-functional influence"],
+      bestFor: ["AI Strategist", "Strategic Projects"],
+      emphasis: ["enterprise relationships", "AI deployment at scale"],
     },
   },
 };
 
-// Export for use in the agent
-if (typeof module !== 'undefined') module.exports = CRITERIA;
+if (typeof module !== "undefined") module.exports = CRITERIA;

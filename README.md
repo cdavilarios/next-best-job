@@ -1,6 +1,6 @@
 # next-best-job
 
-> An AI agent that scans job portals, scores roles against your criteria, and prepares application materials — built and actively used during my own job search.
+> An AI agent that scans job portals, scores roles against your criteria, and prepares application materials — built and actively used during a real job search.
 
 **Live →** [cdavilarios.github.io/next-best-job](https://cdavilarios.github.io/next-best-job)
 
@@ -8,140 +8,89 @@
 
 ## What this is
 
-I built this during my MBA job search (Cornell Tech → NYC AI roles, $180K+ target, June 15 deadline). Instead of manually scrolling job boards, I wrote an agent that does it for me and surfaces only the roles worth my time.
+Instead of manually scrolling job boards, this agent scans for you and surfaces only the roles worth your time. Configure your criteria once, run it daily.
 
-The architecture is simple enough to understand in an afternoon, powerful enough to run a real job search.
+The public page shows Fantasy Land sample data. Your real pipeline is password-protected and lives only in your browser — nothing private is in this repo.
 
 ## Agent architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                      next-best-job                       │
-│                                                         │
-│  ┌──────────┐    ┌──────────┐    ┌──────────────────┐  │
-│  │  Scanner  │───▶│  Scorer  │───▶│ Materials Engine │  │
-│  │          │    │          │    │                  │  │
-│  │ Indeed   │    │ Weighted │    │ Resume tailor    │  │
-│  │ Dice     │    │ criteria │    │ Cover letter gen │  │
-│  │ Web      │    │ Must/nice│    │ Interview prep   │  │
-│  └──────────┘    └──────────┘    └──────────────────┘  │
-│                                           │              │
-│                                  ┌────────▼───────┐     │
-│                                  │    Tracker     │     │
-│                                  │                │     │
-│                                  │ Applied        │     │
-│                                  │ Screening      │     │
-│                                  │ Interview      │     │
-│                                  │ Offer          │     │
-│                                  └────────────────┘     │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│                      next-best-job                        │
+│  ┌──────────┐    ┌──────────┐    ┌───────────────────┐  │
+│  │  Scanner  │───▶│  Scorer  │───▶│  Materials Engine │  │
+│  │ Indeed   │    │ Weighted │    │ Resume tailor     │  │
+│  │ Dice     │    │ criteria │    │ Cover letter gen  │  │
+│  └──────────┘    └──────────┘    └───────────────────┘  │
+│                                            │              │
+│                                   ┌────────▼───────┐     │
+│                                   │    Tracker     │     │
+│                                   │ Applied→Offer  │     │
+│                                   └────────────────┘     │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ### Stage 1 — Scanner
-Pulls from Indeed and Dice APIs using MCP (Model Context Protocol) tool calls. Runs keyword searches across role types: TPM, AI PM, Enterprise AI Strategist, Strategic Projects.
+Pulls from Indeed and Dice APIs via MCP (Model Context Protocol) tool calls across your configured role types.
 
 ### Stage 2 — Scorer
-Each role is scored 0–100 against a weighted criteria set:
-
-| Criterion | Type | Weight |
-|---|---|---|
-| NYC / hybrid ≤ 3x/week | Must-have | Disqualify if missing |
-| Base salary ≥ $180K | Must-have | Disqualify if missing |
-| No sponsorship required | Must-have | Disqualify if missing |
-| AI/GenAI core to role | Must-have | Disqualify if missing |
-| Tier 1 company | Nice-to-have | +15 pts |
-| H-1B sponsorship offered | Nice-to-have | +15 pts |
-| Bonus ≥ $30K | Nice-to-have | +10 pts |
-| Tuition reimbursement | Nice-to-have | +10 pts |
-| LATAM exposure | Nice-to-have | +5 pts |
+Each role scored 0–100 against weighted criteria in `src/criteria.js`. Must-haves disqualify. Nice-to-haves add points.
 
 ### Stage 3 — Materials Engine
-Two cover letter voices, selected per role type:
-- **Enterprise delivery** — for big tech, financial services, consulting
-- **Founder-operator** — for startups and early-stage companies
-
-Resume track selected per role:
-- TPM/Delivery track
-- AI PM track
-- Enterprise AI Strategist track
+Cover letter voice auto-selected per role type via Claude API:
+- **Enterprise delivery** — big tech, financial services, consulting
+- **Founder-operator** — startups, early-stage companies
 
 ### Stage 4 — Tracker
-Kanban pipeline: Applied → Screening → Interview → Offer. Encrypted in localStorage, never leaves the browser.
-
----
-
-## How to run your own instance
-
-### Prerequisites
-- A GitHub account
-- Basic comfort with copy/paste
-
-### Steps
-
-**1. Fork this repo**
-Click "Fork" top-right → give it any name.
-
-**2. Set your password**
-Open `index.html`, find this line near the top of the `<script>` block:
-```js
-const PASSWORD_HASH = "YOUR_HASH_HERE";
-```
-Generate your hash:
-```bash
-echo -n "your-password" | sha256sum
-```
-Paste the hash value (without the trailing ` -`) into the file.
-
-**3. Update your criteria**
-Edit `src/criteria.js` — set your target salary, location, role types, and nice-to-haves.
-
-**4. Enable GitHub Pages**
-`Settings → Pages → Source: Deploy from branch → Branch: main → / (root) → Save`
-
-Your site will be live at `https://yourusername.github.io/next-best-job` within a few minutes.
-
-**5. (Optional) Connect Claude API for live job scanning**
-In the private dashboard, paste your Anthropic API key in Settings. This enables the live agent — job scanning, scoring, and materials generation. The key is stored only in your browser and never sent anywhere except Anthropic's API.
+Kanban: Applied → Screening → Interview → Offer. Encrypted in localStorage, never leaves the browser.
 
 ---
 
 ## Privacy model
 
-| What | Where | Who can see it |
-|---|---|---|
-| Agent code | GitHub (public) | Everyone |
-| Scoring criteria | GitHub (public) | Everyone |
-| Your applications | Browser localStorage | Only you |
-| Your API key | Browser localStorage | Only you |
-| Your password | Never stored — hash only | Nobody |
-| Your real name/data | Not in this repo | Nobody |
+| What | Visible to |
+|---|---|
+| Agent source code | Everyone (public) |
+| Fantasy Land sample data | Everyone (it's fake) |
+| Your real applications | Only you (encrypted localStorage) |
+| Your real criteria | Only you (private dashboard) |
+| Your API key | Only you (never leaves browser) |
+| Your password | Nobody (SHA-256 hash only, never stored) |
+
+---
+
+## Run your own instance
+
+1. **Fork this repo**
+2. **Set your password** — open `index.html`, find `PASSWORD_HASH`, replace:
+   ```bash
+   echo -n "yourpassword" | shasum -a 256   # macOS
+   echo -n "yourpassword" | sha256sum        # Linux
+   ```
+3. **Edit `src/criteria.js`** — set your real salary floor, locations, role types
+4. **Enable GitHub Pages** — Settings → Pages → Deploy from branch → main → / (root)
+5. **Add Claude API key** — private dashboard → Settings → enables AI Generate
 
 ---
 
 ## Tech stack
 
-- **Frontend:** Vanilla HTML/CSS/JS — no framework, no build step, no npm
-- **Job search:** Indeed API + Dice API via MCP
-- **AI engine:** Claude API (Anthropic) — scoring, cover letter generation, interview prep
-- **Auth:** SHA-256 password hash checked client-side
-- **Storage:** Encrypted localStorage (no backend, no database)
-- **Hosting:** GitHub Pages (free)
+- Vanilla HTML/CSS/JS — no framework, no build step, no npm
+- Indeed + Dice APIs via MCP for job search
+- Claude API (Anthropic) for cover letter generation and interview prep
+- SHA-256 client-side auth
+- Encrypted localStorage for private pipeline data
+- GitHub Pages hosting (free)
 
 ---
 
 ## What I learned building this
 
-- MCP (Model Context Protocol) is the right abstraction for connecting LLMs to external APIs — cleaner than raw function calling
-- Weighted scoring beats vibes — having explicit criteria forces you to be honest about what you actually want
-- The materials generation is only as good as the role context you feed it — garbage in, garbage out
-- Cover letter voice matters more than content — same bullet points, completely different reception
+- MCP is the right abstraction for connecting LLMs to external APIs
+- Weighted scoring beats vibes — explicit criteria forces honesty about what you actually want
+- Cover letter voice matters more than content
+- The materials engine is only as good as the context you feed it
 
 ---
 
-## About
-
-Built by [Claudia Davila Rios](https://linkedin.com/in/claudavilarios) — CPO & co-founder of Sociate AI, Cornell Tech MBA '26, formerly AI TPM at Rimac Seguros and PM at Interbank. I built this to run my own job search systematically. Goal: 3 offers ≥ $180K in NYC by June 15, 2026.
-
----
-
-*Job listings retrieved via AI-powered search. Verify all details directly with employers before applying.*
+*Fantasy Land roles are fictional. Real job listings retrieved via AI-powered search — verify all details with employers before applying.*

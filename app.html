@@ -6,639 +6,563 @@
 <title>Dashboard — next-best-job</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0c0c0e;--surface:#141416;--surface2:#1c1c20;--surface3:#242428;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --text:#f0ede8;--muted:#7a7870;--muted2:#5a5850;
-  --accent:#c8b89a;--accent2:#e8d5b0;
-  --green:#4caf7d;--green-bg:rgba(76,175,125,0.1);
-  --amber:#e5a84b;--amber-bg:rgba(229,168,75,0.1);
-  --red:#e05c5c;--red-bg:rgba(224,92,92,0.1);
-  --blue:#6ba3d6;--blue-bg:rgba(107,163,214,0.1);
-  --purple:#9b8fc4;--purple-bg:rgba(155,143,196,0.1);
-}
+:root{--bg:#0c0c0e;--sf:#141416;--sf2:#1c1c20;--sf3:#242428;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.13);--tx:#f0ede8;--mu:#7a7870;--mu2:#5a5850;--ac:#c8b89a;--ac2:#e8d5b0;--gn:#4caf7d;--gnb:rgba(76,175,125,0.1);--am:#e5a84b;--amb:rgba(229,168,75,0.1);--rd:#e05c5c;--rdb:rgba(224,92,92,0.1);--bl:#6ba3d6;--blb:rgba(107,163,214,0.1);--pu:#9b8fc4;--pub:rgba(155,143,196,0.1);}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
-.shell{display:flex;min-height:100vh;}
-
-/* SIDEBAR */
-.sidebar{width:210px;min-width:210px;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
-.logo{padding:0 18px 20px;border-bottom:1px solid var(--border);margin-bottom:12px;}
-.logo-name{font-family:'DM Serif Display',serif;font-size:16px;color:var(--accent2);}
-.logo-sub{font-size:9px;color:var(--muted2);text-transform:uppercase;letter-spacing:.1em;margin-top:2px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 18px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:all .15s;border-left:2px solid transparent;}
-.nav-item:hover{color:var(--text);background:var(--surface2);}
-.nav-item.active{color:var(--accent2);border-left-color:var(--accent);background:rgba(200,184,154,0.05);}
-.nav-icon{font-size:14px;width:16px;text-align:center;}
-.nav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;background:var(--surface3);color:var(--muted);padding:1px 7px;border-radius:8px;}
-.sidebar-section{padding:14px 18px 4px;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);}
-.countdown-box{margin:auto 14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
-.cd-days{font-family:'DM Mono',monospace;font-size:38px;color:var(--accent2);line-height:1;}
-.cd-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
-.cd-target{font-size:10px;color:var(--muted2);margin-top:5px;}
-
-/* MAIN */
-.main{flex:1;padding:28px 36px;max-width:1000px;overflow-y:auto;}
-.page{display:none;}.page.active{display:block;}
-.page-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--accent2);letter-spacing:-.5px;margin-bottom:4px;}
-.page-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
-
-/* STATS */
-.stat-row{display:flex;gap:10px;margin-bottom:24px;}
-.stat-card{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;}
-.stat-val{font-size:26px;font-weight:700;font-family:'DM Mono',monospace;}
-.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
-.stat-card.green .stat-val{color:var(--green);}
-.stat-card.amber .stat-val{color:var(--amber);}
-.stat-card.accent .stat-val{color:var(--accent2);}
-
-/* SECTION HEADS */
-.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:24px;}
-.sec-title{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;}
-
-/* TAGS */
+body{background:var(--bg);color:var(--tx);font-family:'Manrope',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
+.sh{display:flex;min-height:100vh;}
+.sb{width:210px;min-width:210px;background:var(--sf);border-right:1px solid var(--bd);padding:24px 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.lo{padding:0 18px 20px;border-bottom:1px solid var(--bd);margin-bottom:12px;}
+.lon{font-family:'DM Serif Display',serif;font-size:16px;color:var(--ac2);}
+.los{font-size:9px;color:var(--mu2);text-transform:uppercase;letter-spacing:.1em;margin-top:2px;}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 18px;cursor:pointer;color:var(--mu);font-size:13px;font-weight:500;transition:all .15s;border-left:2px solid transparent;}
+.ni:hover{color:var(--tx);background:var(--sf2);}
+.ni.act{color:var(--ac2);border-left-color:var(--ac);background:rgba(200,184,154,0.05);}
+.nic{font-size:14px;width:16px;text-align:center;}
+.nb{margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;background:var(--sf3);color:var(--mu);padding:1px 7px;border-radius:8px;}
+.ss_{padding:14px 18px 4px;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu2);}
+.cd{margin:auto 14px 16px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center;}
+.cdn{font-family:'DM Mono',monospace;font-size:38px;color:var(--ac2);line-height:1;}
+.cdl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+.cdt{font-size:10px;color:var(--mu2);margin-top:5px;}
+.mn{flex:1;padding:28px 36px;max-width:1000px;}
+.pg{display:none;}.pg.act{display:block;}
+.pt_{font-family:'DM Serif Display',serif;font-size:26px;color:var(--ac2);letter-spacing:-.5px;margin-bottom:4px;}
+.ps_{font-size:13px;color:var(--mu);margin-bottom:24px;}
+.sr{display:flex;gap:10px;margin-bottom:24px;}
+.sc{flex:1;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:16px;}
+.sv{font-size:26px;font-weight:700;font-family:'DM Mono',monospace;color:var(--tx);}
+.sl_{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
+.sc.gn .sv{color:var(--gn);}
+.sc.ac .sv{color:var(--ac2);}
+.sh_{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:24px;}
+.st_{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);font-weight:600;}
 .tag{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700;}
-.tg{background:var(--green-bg);color:var(--green);}
-.ta{background:var(--amber-bg);color:var(--amber);}
-.tr{background:var(--red-bg);color:var(--red);}
-.tb{background:var(--blue-bg);color:var(--blue);}
-.tp{background:var(--purple-bg);color:var(--purple);}
-.tm{background:rgba(255,255,255,0.05);color:var(--muted);}
-
-/* JOB CARDS */
-.job-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:8px;transition:border-color .15s;}
-.job-card:hover{border-color:var(--border2);}
-.job-card.t1{border-left:3px solid var(--accent);}
-.job-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
-.job-title{font-size:14px;font-weight:700;color:var(--text);text-decoration:none;line-height:1.3;}
-.job-title:hover{color:var(--accent2);}
-.job-co{font-size:12px;color:var(--muted);margin-top:3px;}
-.job-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center;}
-.job-acts{display:flex;gap:7px;margin-top:10px;}
-.score{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;min-width:42px;text-align:right;flex-shrink:0;}
-.s-hot{color:var(--green);}.s-warm{color:var(--amber);}.s-cold{color:var(--muted);}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:4px;font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text);transition:all .15s;text-decoration:none;}
-.btn:hover{background:var(--surface2);border-color:var(--accent);color:var(--accent2);}
-.btn-p{background:var(--accent);color:var(--bg);border-color:var(--accent);}
-.btn-p:hover{background:var(--accent2);border-color:var(--accent2);color:var(--bg);}
-.btn-sm{font-size:11px;padding:4px 9px;}
-.btn-danger{border-color:var(--red-bg);color:var(--red);}
-.btn-danger:hover{background:var(--red-bg);}
-
-/* PIPELINE */
-.pipeline{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;}
-.pipe-col{min-width:195px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;}
-.pipe-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.pipe-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted);}
-.pipe-cnt{font-size:9px;font-family:'DM Mono',monospace;background:var(--surface3);color:var(--muted);padding:1px 7px;border-radius:8px;}
-.pipe-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 11px;margin-bottom:7px;}
-.pc-title{font-weight:700;color:var(--text);font-size:12px;margin-bottom:2px;}
-.pc-co{color:var(--muted);font-size:10px;}
-.pc-comp{color:var(--muted);font-size:10px;margin-top:2px;}
-.pc-date{color:var(--muted2);font-size:9px;margin-top:5px;font-family:'DM Mono',monospace;}
-.pc-acts{margin-top:7px;display:flex;gap:5px;flex-wrap:wrap;}
-
-/* TABLE */
+.tg{background:var(--gnb);color:var(--gn);}
+.ta{background:var(--amb);color:var(--am);}
+.tr{background:var(--rdb);color:var(--rd);}
+.tb{background:var(--blb);color:var(--bl);}
+.tp{background:var(--pub);color:var(--pu);}
+.tm{background:rgba(255,255,255,0.05);color:var(--mu);}
+.jc{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:8px;transition:border-color .15s;}
+.jc:hover{border-color:var(--bd2);}
+.jc.t1{border-left:3px solid var(--ac);}
+.jt_{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.jtl{font-size:14px;font-weight:700;color:var(--tx);text-decoration:none;line-height:1.3;}
+.jtl:hover{color:var(--ac2);}
+.jco{font-size:12px;color:var(--mu);margin-top:3px;}
+.jm{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center;}
+.ja{display:flex;gap:7px;margin-top:10px;}
+.sc_{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;min-width:42px;text-align:right;flex-shrink:0;}
+.sh_{color:var(--gn);}.sw{color:var(--am);}
+.btn{display:inline-flex;align-items:center;gap:4px;font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--bd2);background:transparent;color:var(--tx);transition:all .15s;text-decoration:none;}
+.btn:hover{background:var(--sf2);border-color:var(--ac);color:var(--ac2);}
+.bp{background:var(--ac);color:var(--bg);border-color:var(--ac);}.bp:hover{background:var(--ac2);border-color:var(--ac2);color:var(--bg);}
+.bs{font-size:11px;padding:4px 9px;}
+.bd_{border-color:var(--rdb);color:var(--rd);}.bd_:hover{background:var(--rdb);}
+.pl{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;}
+.pc{min-width:195px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:12px;}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.ptt{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--mu);}
+.pct{font-size:9px;font-family:'DM Mono',monospace;background:var(--sf3);color:var(--mu);padding:1px 7px;border-radius:8px;}
+.picard{background:var(--sf2);border:1px solid var(--bd);border-radius:7px;padding:10px 11px;margin-bottom:7px;}
+.pct_{font-weight:700;color:var(--tx);font-size:12px;margin-bottom:2px;}
+.pco{color:var(--mu);font-size:10px;}
+.pcp{color:var(--mu);font-size:10px;margin-top:2px;}
+.pcd{color:var(--mu2);font-size:9px;margin-top:5px;font-family:'DM Mono',monospace;}
+.pca{margin-top:7px;display:flex;gap:5px;flex-wrap:wrap;}
 table{width:100%;border-collapse:collapse;}
-th{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);}
-td{padding:11px 10px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+th{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);padding:8px 10px;text-align:left;border-bottom:1px solid var(--bd);}
+td{padding:11px 10px;border-bottom:1px solid var(--bd);font-size:12px;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(255,255,255,0.015);}
-
-/* CRITERIA */
-.crit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.crit-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;}
-.crit-title{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;font-weight:700;}
-.crit-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;font-size:12px;}
+.cg_{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.cc{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:18px;}
+.ct_{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);margin-bottom:10px;font-weight:700;}
+.ci{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;font-size:12px;}
 .cdot{width:5px;height:5px;border-radius:50%;margin-top:6px;flex-shrink:0;}
-.cdot-g{background:var(--green);}.cdot-a{background:var(--amber);}
-
-/* FORM */
-input[type="text"],input[type="password"],select,textarea{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;padding:8px 11px;width:100%;outline:none;transition:border-color .15s;}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);}
-select option{background:var(--surface2);}
-.form-row{display:flex;gap:10px;margin-bottom:10px;}
-.form-group{flex:1;}
-.form-label{font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.07em;display:block;}
-
-/* AI GEN MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(4px);}
-.modal-overlay.open{opacity:1;pointer-events:all;}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:28px;width:620px;max-width:95vw;max-height:88vh;overflow-y:auto;position:relative;transform:translateY(16px);transition:transform .2s;}
-.modal-overlay.open .modal{transform:translateY(0);}
-.modal-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent2);margin-bottom:16px;}
-.modal-close{position:absolute;top:14px;right:18px;cursor:pointer;color:var(--muted);font-size:22px;background:none;border:none;padding:0;}
-.ai-out{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:13px;line-height:1.75;white-space:pre-wrap;min-height:80px;color:var(--text);margin-top:12px;}
-.ai-loading{color:var(--muted);font-style:italic;}
-.divider{border:none;border-top:1px solid var(--border);margin:18px 0;}
-
-/* SETTINGS */
-.settings-section{margin-bottom:24px;}
-.settings-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;}
-.settings-row{display:flex;gap:10px;align-items:flex-end;}
-
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px;}
+.cdg{background:var(--gn);}.cda{background:var(--am);}
+input[type="text"],input[type="password"],select,textarea{background:var(--sf2);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-family:'Manrope',sans-serif;font-size:13px;padding:8px 11px;width:100%;outline:none;transition:border-color .15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);}
+select option{background:var(--sf2);}
+.fr{display:flex;gap:10px;margin-bottom:10px;}
+.fg{flex:1;}
+.fl{font-size:10px;color:var(--mu);margin-bottom:4px;text-transform:uppercase;letter-spacing:.07em;display:block;}
+.ao{background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:16px;font-size:13px;line-height:1.75;white-space:pre-wrap;min-height:80px;color:var(--tx);margin-top:12px;}
+.al{color:var(--mu);font-style:italic;}
+.dv{border:none;border-top:1px solid var(--bd);margin:18px 0;}
+code{font-family:'DM Mono',monospace;font-size:12px;background:var(--sf2);padding:2px 7px;border-radius:4px;color:var(--ac);}
+::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--sf3);border-radius:2px;}
 </style>
 </head>
 <body>
+<div class="sh">
 
-<div class="shell">
-
-<!-- SIDEBAR -->
-<nav class="sidebar">
-  <div class="logo">
-    <div class="logo-name">next-best-job</div>
-    <div class="logo-sub">Private dashboard</div>
-  </div>
-
-  <div class="nav-item active" onclick="nav('dashboard',this)"><span class="nav-icon">◈</span> Dashboard</div>
-  <div class="nav-item" onclick="nav('shortlist',this)"><span class="nav-icon">◎</span> Shortlist <span class="nav-badge" id="nb-shortlist">5</span></div>
-  <div class="nav-item" onclick="nav('pipeline',this)"><span class="nav-icon">▦</span> Pipeline</div>
-  <div class="sidebar-section">Tools</div>
-  <div class="nav-item" onclick="nav('generate',this)"><span class="nav-icon">✦</span> AI Generate</div>
-  <div class="nav-item" onclick="nav('criteria',this)"><span class="nav-icon">◇</span> Criteria</div>
-  <div class="nav-item" onclick="nav('add',this)"><span class="nav-icon">＋</span> Add Role</div>
-  <div class="sidebar-section">Account</div>
-  <div class="nav-item" onclick="nav('settings',this)"><span class="nav-icon">⚙</span> Settings</div>
-  <div class="nav-item" onclick="logout()" style="color:var(--muted2)"><span class="nav-icon">↩</span> Log out</div>
-
+<nav class="sb">
+  <div class="lo"><div class="lon">next-best-job</div><div class="los">Private dashboard</div></div>
+  <div class="ni act" onclick="nav('dash',this)"><span class="nic">◈</span> Dashboard</div>
+  <div class="ni" onclick="nav('sl',this)"><span class="nic">◎</span> Shortlist <span class="nb" id="nb-sl">5</span></div>
+  <div class="ni" onclick="nav('pipe',this)"><span class="nic">▦</span> Pipeline</div>
+  <div class="ss_">Tools</div>
+  <div class="ni" onclick="nav('gen',this)"><span class="nic">✦</span> AI Generate</div>
+  <div class="ni" onclick="nav('crit',this)"><span class="nic">◇</span> Criteria</div>
+  <div class="ni" onclick="nav('add',this)"><span class="nic">＋</span> Add Role</div>
+  <div class="ss_">Account</div>
+  <div class="ni" onclick="nav('set',this)"><span class="nic">⚙</span> Settings</div>
+  <div class="ni" onclick="logout()" style="color:var(--mu2)"><span class="nic">↩</span> Log out</div>
   <div style="flex:1"></div>
-  <div class="countdown-box">
-    <div class="cd-days" id="cd">54</div>
-    <div class="cd-label">Days left</div>
-    <div class="cd-target">June 15 target</div>
+  <div class="cd">
+    <div class="cdn" id="cdn">—</div>
+    <div class="cdl">Days left</div>
+    <div class="cdt" id="cdt">May 15 deadline</div>
   </div>
 </nav>
 
-<!-- MAIN -->
-<main class="main">
+<main class="mn">
 
   <!-- DASHBOARD -->
-  <div id="page-dashboard" class="page active">
-    <div class="page-title">Good morning, Claudia.</div>
-    <div class="page-sub">3 offers · $180K+ · NYC · June 15.</div>
-    <div class="stat-row">
-      <div class="stat-card accent"><div class="stat-val" id="s-applied">0</div><div class="stat-label">Applied</div></div>
-      <div class="stat-card"><div class="stat-val" id="s-screen">0</div><div class="stat-label">Screening</div></div>
-      <div class="stat-card"><div class="stat-val" id="s-interview">0</div><div class="stat-label">Interview</div></div>
-      <div class="stat-card green"><div class="stat-val" id="s-offer">0</div><div class="stat-label">Offers</div></div>
+  <div id="pg-dash" class="pg act">
+    <div class="pt_">Good morning.</div>
+    <div class="ps_">3 offers · $180K+ · NYC · May 15 deadline.</div>
+    <div class="sr">
+      <div class="sc ac"><div class="sv" id="s-ap">0</div><div class="sl_">Applied</div></div>
+      <div class="sc"><div class="sv" id="s-sc">0</div><div class="sl_">Screening</div></div>
+      <div class="sc"><div class="sv" id="s-in">0</div><div class="sl_">Interview</div></div>
+      <div class="sc gn"><div class="sv" id="s-of">0</div><div class="sl_">Offers</div></div>
     </div>
 
-    <div class="sec-head"><span class="sec-title">Apply today</span></div>
+    <div class="sh_" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:24px"><span class="st_">Apply today</span></div>
 
-    <div class="job-card t1">
-      <div class="job-top">
+    <div class="jc t1">
+      <div class="jt_">
         <div>
-          <a class="job-title" href="https://to.indeed.com/aa7cjzn9rgcd" target="_blank">Sr. PM, Applied AI — Google DeepMind ↗</a>
-          <div class="job-co">Google DeepMind · New York, NY</div>
-          <div class="job-meta">
-            <span class="tag tg">$256K–$278K</span><span class="tag tp">Tier 1</span>
-            <span class="tag tb">Posted today</span><span class="tag ta">Apply NOW</span>
-          </div>
+          <a class="jtl" href="https://to.indeed.com/aa7cjzn9rgcd" target="_blank">Sr. PM, Applied AI — Google DeepMind ↗</a>
+          <div class="jco">New York, NY · $256K–$278K · Posted today</div>
+          <div class="jm"><span class="tag tg">$256K–$278K</span><span class="tag tp">Tier 1</span><span class="tag tb">GenAI PM</span><span class="tag ta">Apply now</span></div>
         </div>
-        <div class="score s-hot">92</div>
+        <div class="sc_ sh_">92</div>
       </div>
-      <div class="job-acts">
-        <button class="btn btn-p btn-sm" onclick="openGen('deepmind')">✦ Generate cover letter</button>
-        <button class="btn btn-sm" onclick="addRole('Sr. PM Applied AI','Google DeepMind','https://to.indeed.com/aa7cjzn9rgcd',256000)">+ Track</button>
+      <div class="ja">
+        <button class="btn bp bs" onclick="openGen('deepmind')">✦ Generate cover letter</button>
+        <button class="btn bs" onclick="addRole('Sr. PM Applied AI','Google DeepMind','https://to.indeed.com/aa7cjzn9rgcd',256000)">+ Track</button>
       </div>
     </div>
 
-    <div class="job-card">
-      <div class="job-top">
+    <div class="jc">
+      <div class="jt_">
         <div>
-          <a class="job-title" href="https://to.indeed.com/aaj6n4dvqwwn" target="_blank">PM, Operator Experience — Flow ↗</a>
-          <div class="job-co">Flow · New York, NY</div>
-          <div class="job-meta">
-            <span class="tag tg">$180K–$230K</span><span class="tag tb">Startup</span>
-            <span class="tag tg">Founder-operator voice</span>
-          </div>
+          <a class="jtl" href="https://to.indeed.com/aaj6n4dvqwwn" target="_blank">PM, Operator Experience — Flow ↗</a>
+          <div class="jco">New York, NY · $180K–$230K · Startup</div>
+          <div class="jm"><span class="tag tg">$180K–$230K</span><span class="tag tb">Startup</span><span class="tag tg">Founder-operator voice</span></div>
         </div>
-        <div class="score s-hot">84</div>
+        <div class="sc_ sh_">84</div>
       </div>
-      <div class="job-acts">
-        <button class="btn btn-p btn-sm" onclick="openGen('flow')">✦ Generate cover letter</button>
-        <button class="btn btn-sm" onclick="addRole('PM Operator Experience','Flow','https://to.indeed.com/aaj6n4dvqwwn',205000)">+ Track</button>
+      <div class="ja">
+        <button class="btn bp bs" onclick="openGen('flow')">✦ Generate cover letter</button>
+        <button class="btn bs" onclick="addRole('PM Operator Experience','Flow','https://to.indeed.com/aaj6n4dvqwwn',205000)">+ Track</button>
       </div>
     </div>
 
-    <div class="job-card t1">
-      <div class="job-top">
+    <div class="jc t1">
+      <div class="jt_">
         <div>
-          <a class="job-title" href="https://to.indeed.com/aay9qnflznrc" target="_blank">Digital Solutions Owner — Macquarie ↗</a>
-          <div class="job-co">Macquarie Group · New York, NY</div>
-          <div class="job-meta">
-            <span class="tag tg">$260K–$290K</span><span class="tag tg">Top comp</span>
-            <span class="tag tb">Enterprise delivery</span>
-          </div>
+          <a class="jtl" href="https://to.indeed.com/aay9qnflznrc" target="_blank">Digital Solutions Owner — Macquarie ↗</a>
+          <div class="jco">New York, NY · $260K–$290K</div>
+          <div class="jm"><span class="tag tg">$260K–$290K</span><span class="tag tg">Top comp</span><span class="tag tb">Enterprise delivery</span></div>
         </div>
-        <div class="score s-hot">81</div>
+        <div class="sc_ sh_">81</div>
       </div>
-      <div class="job-acts">
-        <button class="btn btn-p btn-sm" onclick="openGen('macquarie')">✦ Generate cover letter</button>
-        <button class="btn btn-sm" onclick="addRole('Digital Solutions Owner','Macquarie','https://to.indeed.com/aay9qnflznrc',275000)">+ Track</button>
+      <div class="ja">
+        <button class="btn bp bs" onclick="openGen('macquarie')">✦ Generate cover letter</button>
+        <button class="btn bs" onclick="addRole('Digital Solutions Owner','Macquarie','https://to.indeed.com/aay9qnflznrc',275000)">+ Track</button>
       </div>
     </div>
 
-    <div class="sec-head" style="margin-top:28px"><span class="sec-title">Investigate this week</span></div>
-    <div class="job-card">
-      <div class="job-top">
+    <div class="sh_" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:28px"><span class="st_">Investigate this week</span></div>
+    <div class="jc">
+      <div class="jt_">
         <div>
-          <a class="job-title" href="https://to.indeed.com/aadkzxyvkkwp" target="_blank">AI Transformation Manager — Accenture ↗</a>
-          <div class="job-co">Accenture · New York, NY</div>
-          <div class="job-meta"><span class="tag ta">Verify salary level</span><span class="tag tb">Enterprise delivery</span></div>
+          <a class="jtl" href="https://to.indeed.com/aadkzxyvkkwp" target="_blank">AI Transformation Manager — Accenture ↗</a>
+          <div class="jco">New York, NY · Verify salary level</div>
+          <div class="jm"><span class="tag ta">Verify salary</span><span class="tag tb">Enterprise delivery</span></div>
         </div>
-        <div class="score s-warm">71</div>
+        <div class="sc_ sw">71</div>
+      </div>
+    </div>
+    <div class="jc">
+      <div class="jt_">
+        <div>
+          <a class="jtl" href="https://to.indeed.com/aanzmp84w7tm" target="_blank">Azure AI Security Manager — Deloitte ↗</a>
+          <div class="jco">New York, NY · $144K–$265K</div>
+          <div class="jm"><span class="tag ta">$144K–$265K</span><span class="tag tm">Verify seniority</span></div>
+        </div>
+        <div class="sc_ sw">66</div>
       </div>
     </div>
   </div>
 
   <!-- SHORTLIST -->
-  <div id="page-shortlist" class="page">
-    <div class="page-title">Today's Shortlist</div>
-    <div class="page-sub">April 22, 2026 — scored against your criteria.</div>
+  <div id="pg-sl" class="pg">
+    <div class="pt_">Shortlist</div>
+    <div class="ps_">Scored against your criteria. NYC · $180K+ · AI/GenAI roles.</div>
     <table>
       <thead><tr><th>Role</th><th>Company</th><th>Comp</th><th>Score</th><th>Voice</th><th>Action</th></tr></thead>
       <tbody>
-        <tr><td><a class="job-title" href="https://to.indeed.com/aa7cjzn9rgcd" target="_blank" style="font-size:12px">Sr. PM Applied AI ↗</a></td><td>Google DeepMind</td><td><span class="tag tg">$256–278K</span></td><td><span style="color:var(--green);font-family:'DM Mono',monospace;font-weight:700">92</span></td><td><span class="tag tp">TPM→PM</span></td><td><button class="btn btn-sm" onclick="openGen('deepmind')">Generate ↗</button></td></tr>
-        <tr><td><a class="job-title" href="https://to.indeed.com/aaj6n4dvqwwn" target="_blank" style="font-size:12px">PM Operator Exp ↗</a></td><td>Flow</td><td><span class="tag tg">$180–230K</span></td><td><span style="color:var(--green);font-family:'DM Mono',monospace;font-weight:700">84</span></td><td><span class="tag tb">Founder-op</span></td><td><button class="btn btn-sm" onclick="openGen('flow')">Generate ↗</button></td></tr>
-        <tr><td><a class="job-title" href="https://to.indeed.com/aay9qnflznrc" target="_blank" style="font-size:12px">Digital Solutions Owner ↗</a></td><td>Macquarie</td><td><span class="tag tg">$260–290K</span></td><td><span style="color:var(--green);font-family:'DM Mono',monospace;font-weight:700">81</span></td><td><span class="tag tb">Enterprise</span></td><td><button class="btn btn-sm" onclick="openGen('macquarie')">Generate ↗</button></td></tr>
-        <tr><td><a class="job-title" href="https://to.indeed.com/aadkzxyvkkwp" target="_blank" style="font-size:12px">AI Transformation Mgr ↗</a></td><td>Accenture</td><td><span class="tag ta">Verify</span></td><td><span style="color:var(--amber);font-family:'DM Mono',monospace;font-weight:700">71</span></td><td><span class="tag tb">Enterprise</span></td><td><button class="btn btn-sm" onclick="openGen('accenture')">Generate ↗</button></td></tr>
-        <tr><td><a class="job-title" href="https://to.indeed.com/aanzmp84w7tm" target="_blank" style="font-size:12px">Azure AI Security Mgr ↗</a></td><td>Deloitte</td><td><span class="tag ta">$144–265K</span></td><td><span style="color:var(--amber);font-family:'DM Mono',monospace;font-weight:700">66</span></td><td><span class="tag tb">Enterprise</span></td><td><button class="btn btn-sm">Check JD</button></td></tr>
+        <tr><td><a class="jtl" href="https://to.indeed.com/aa7cjzn9rgcd" target="_blank" style="font-size:12px">Sr. PM Applied AI ↗</a></td><td>Google DeepMind</td><td><span class="tag tg">$256–278K</span></td><td><span style="color:var(--gn);font-family:'DM Mono',monospace;font-weight:700">92</span></td><td><span class="tag tp">TPM→PM</span></td><td><button class="btn bs" onclick="openGen('deepmind')">Generate ↗</button></td></tr>
+        <tr><td><a class="jtl" href="https://to.indeed.com/aaj6n4dvqwwn" target="_blank" style="font-size:12px">PM Operator Exp ↗</a></td><td>Flow</td><td><span class="tag tg">$180–230K</span></td><td><span style="color:var(--gn);font-family:'DM Mono',monospace;font-weight:700">84</span></td><td><span class="tag tb">Founder-op</span></td><td><button class="btn bs" onclick="openGen('flow')">Generate ↗</button></td></tr>
+        <tr><td><a class="jtl" href="https://to.indeed.com/aay9qnflznrc" target="_blank" style="font-size:12px">Digital Solutions Owner ↗</a></td><td>Macquarie</td><td><span class="tag tg">$260–290K</span></td><td><span style="color:var(--gn);font-family:'DM Mono',monospace;font-weight:700">81</span></td><td><span class="tag tb">Enterprise</span></td><td><button class="btn bs" onclick="openGen('macquarie')">Generate ↗</button></td></tr>
+        <tr><td><a class="jtl" href="https://to.indeed.com/aadkzxyvkkwp" target="_blank" style="font-size:12px">AI Transformation Mgr ↗</a></td><td>Accenture</td><td><span class="tag ta">Verify</span></td><td><span style="color:var(--am);font-family:'DM Mono',monospace;font-weight:700">71</span></td><td><span class="tag tb">Enterprise</span></td><td><button class="btn bs" onclick="openGen('accenture')">Generate ↗</button></td></tr>
+        <tr><td><a class="jtl" href="https://to.indeed.com/aanzmp84w7tm" target="_blank" style="font-size:12px">Azure AI Security Mgr ↗</a></td><td>Deloitte</td><td><span class="tag ta">$144–265K</span></td><td><span style="color:var(--am);font-family:'DM Mono',monospace;font-weight:700">66</span></td><td><span class="tag tb">Enterprise</span></td><td><button class="btn bs">Check JD</button></td></tr>
       </tbody>
     </table>
   </div>
 
   <!-- PIPELINE -->
-  <div id="page-pipeline" class="page">
-    <div class="page-title">Pipeline</div>
-    <div class="page-sub">Track every application to offer.</div>
-    <div class="stat-row">
-      <div class="stat-card accent"><div class="stat-val" id="p-applied">0</div><div class="stat-label">Applied</div></div>
-      <div class="stat-card"><div class="stat-val" id="p-screen">0</div><div class="stat-label">Screening</div></div>
-      <div class="stat-card"><div class="stat-val" id="p-interview">0</div><div class="stat-label">Interview</div></div>
-      <div class="stat-card green"><div class="stat-val" id="p-offer">0</div><div class="stat-label">Offers</div></div>
+  <div id="pg-pipe" class="pg">
+    <div class="pt_">Pipeline</div>
+    <div class="ps_">Track every application from submission to offer.</div>
+    <div class="sr">
+      <div class="sc ac"><div class="sv" id="p-ap">0</div><div class="sl_">Applied</div></div>
+      <div class="sc"><div class="sv" id="p-sc">0</div><div class="sl_">Screening</div></div>
+      <div class="sc"><div class="sv" id="p-in">0</div><div class="sl_">Interview</div></div>
+      <div class="sc gn"><div class="sv" id="p-of">0</div><div class="sl_">Offers</div></div>
     </div>
-    <div class="pipeline" id="pipeline-board">
-      <div class="pipe-col"><div class="pipe-head"><span class="pipe-title">Applied</span><span class="pipe-cnt" id="cnt-applied">0</span></div><div id="cards-applied"></div></div>
-      <div class="pipe-col"><div class="pipe-head"><span class="pipe-title">Screening</span><span class="pipe-cnt" id="cnt-screening">0</span></div><div id="cards-screening"></div></div>
-      <div class="pipe-col"><div class="pipe-head"><span class="pipe-title">Interview</span><span class="pipe-cnt" id="cnt-interview">0</span></div><div id="cards-interview"></div></div>
-      <div class="pipe-col"><div class="pipe-head"><span class="pipe-title" style="color:var(--green)">Offers</span><span class="pipe-cnt" id="cnt-offer">0</span></div><div id="cards-offer"></div></div>
-      <div class="pipe-col"><div class="pipe-head"><span class="pipe-title">Closed</span><span class="pipe-cnt" id="cnt-rejected">0</span></div><div id="cards-rejected"></div></div>
+    <div class="pl">
+      <div class="pc"><div class="ph"><span class="ptt">Applied</span><span class="pct" id="cnt-ap">0</span></div><div id="cds-ap"><div style="font-size:11px;color:var(--mu2);padding:8px 0">—</div></div></div>
+      <div class="pc"><div class="ph"><span class="ptt">Screening</span><span class="pct" id="cnt-sc">0</span></div><div id="cds-sc"><div style="font-size:11px;color:var(--mu2);padding:8px 0">—</div></div></div>
+      <div class="pc"><div class="ph"><span class="ptt">Interview</span><span class="pct" id="cnt-in">0</span></div><div id="cds-in"><div style="font-size:11px;color:var(--mu2);padding:8px 0">—</div></div></div>
+      <div class="pc"><div class="ph"><span class="ptt" style="color:var(--gn)">Offers</span><span class="pct" id="cnt-of">0</span></div><div id="cds-of"><div style="font-size:11px;color:var(--mu2);padding:8px 0">—</div></div></div>
+      <div class="pc"><div class="ph"><span class="ptt">Closed</span><span class="pct" id="cnt-rj">0</span></div><div id="cds-rj"><div style="font-size:11px;color:var(--mu2);padding:8px 0">—</div></div></div>
     </div>
-    <div style="margin-top:16px"><button class="btn btn-p" onclick="nav('add',null)">＋ Add role</button></div>
-    <div id="all-roles-table" style="margin-top:24px"></div>
+    <div style="margin-top:16px"><button class="btn bp" onclick="nav('add',null)">＋ Add role</button></div>
+    <div id="all-roles" style="margin-top:24px"></div>
   </div>
 
   <!-- AI GENERATE -->
-  <div id="page-generate" class="page">
-    <div class="page-title">AI Generate</div>
-    <div class="page-sub">Cover letters, resume bullets, interview prep — powered by Claude API.</div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Role title</label><input type="text" id="gen-title" placeholder="e.g. Sr. TPM, GenAI"></div>
-        <div class="form-group"><label class="form-label">Company</label><input type="text" id="gen-company" placeholder="e.g. Google"></div>
+  <div id="pg-gen" class="pg">
+    <div class="pt_">AI Generate</div>
+    <div class="ps_">Cover letters, resume bullets, interview prep — powered by Claude. Add your API key in Settings first.</div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:16px;">
+      <div class="fr">
+        <div class="fg"><label class="fl">Role title</label><input type="text" id="g-title" placeholder="e.g. Sr. TPM, GenAI"></div>
+        <div class="fg"><label class="fl">Company</label><input type="text" id="g-company" placeholder="e.g. Google"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Salary (if known)</label><input type="text" id="gen-salary" placeholder="e.g. $220K"></div>
-        <div class="form-group"><label class="form-label">Voice</label>
-          <select id="gen-voice">
+      <div class="fr">
+        <div class="fg"><label class="fl">Salary (if known)</label><input type="text" id="g-salary" placeholder="e.g. $220K"></div>
+        <div class="fg"><label class="fl">Cover letter voice</label>
+          <select id="g-voice">
             <option value="enterprise">Enterprise delivery (big tech, finance, consulting)</option>
             <option value="startup">Founder-operator (startup, early-stage)</option>
           </select>
         </div>
       </div>
-      <div class="form-group" style="margin-bottom:10px"><label class="form-label">Job description (paste key requirements)</label><textarea id="gen-jd" rows="4" placeholder="Paste the key requirements or JD summary here..."></textarea></div>
-      <div class="form-group" style="margin-bottom:16px"><label class="form-label">Generate</label>
-        <select id="gen-type">
+      <div class="fg" style="margin-bottom:10px"><label class="fl">Job description (paste key requirements)</label><textarea id="g-jd" rows="4" placeholder="Paste the JD or key requirements here..."></textarea></div>
+      <div class="fg" style="margin-bottom:16px"><label class="fl">Generate</label>
+        <select id="g-type">
           <option value="cover">Cover letter (3 paragraphs)</option>
           <option value="bullets">Resume bullets (5 tailored)</option>
-          <option value="prep">Interview prep (company research + talking points)</option>
+          <option value="prep">Interview prep (research + talking points)</option>
         </select>
       </div>
-      <button class="btn btn-p" onclick="runGenerate()">✦ Generate with Claude</button>
+      <button class="btn bp" onclick="runGen()">✦ Generate with Claude</button>
     </div>
-    <div id="gen-output" style="display:none">
-      <div class="sec-head"><span class="sec-title">Output</span><button class="btn btn-sm" onclick="copyOutput()">Copy</button></div>
-      <div class="ai-out" id="gen-text"></div>
+    <div id="g-out" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:24px">
+        <span class="st_">Output</span>
+        <button class="btn bs" onclick="copyOut()">Copy</button>
+      </div>
+      <div class="ao" id="g-text"></div>
     </div>
   </div>
 
   <!-- CRITERIA -->
-  <div id="page-criteria" class="page">
-    <div class="page-title">Scoring Criteria</div>
-    <div class="page-sub">How the agent scores every role.</div>
-    <div class="crit-grid">
-      <div class="crit-card">
-        <div class="crit-title">Must-haves</div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>NYC or hybrid (max 3x/week)</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>Base salary ≥ $180K</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>No visa sponsorship required (L-2 EAD)</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>Full-time, permanent</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>AI/GenAI core to role</span></div>
+  <div id="pg-crit" class="pg">
+    <div class="pt_">Scoring Criteria</div>
+    <div class="ps_">How every role is scored. Your real weights, visible only here.</div>
+    <div class="cg_">
+      <div class="cc">
+        <div class="ct_">Must-haves — deal-breakers</div>
+        <div class="ci"><div class="cdot cdg"></div><span>Base salary &ge; $180K</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>NYC or hybrid (max 3x/week in-office)</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>AI / GenAI core to role</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>Full-time, permanent</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>No sponsorship required (L-2 EAD backup)</span></div>
       </div>
-      <div class="crit-card">
-        <div class="crit-title">Nice-to-haves (+pts)</div>
-        <div class="crit-item"><div class="cdot cdot-a"></div><span>Tier 1 company (Google, Anthropic, AWS) +15</span></div>
-        <div class="crit-item"><div class="cdot cdot-a"></div><span>H-1B sponsorship + OPT continuation +15</span></div>
-        <div class="crit-item"><div class="cdot cdot-a"></div><span>Annual bonus ≥ $30K +10</span></div>
-        <div class="crit-item"><div class="cdot cdot-a"></div><span>Tuition / school reimbursement +10</span></div>
-        <div class="crit-item"><div class="cdot cdot-a"></div><span>LATAM market exposure +5</span></div>
+      <div class="cc">
+        <div class="ct_">Nice-to-haves — score boosters</div>
+        <div class="ci"><div class="cdot cda"></div><span>Tier 1 company (Google, Anthropic, AWS) +15</span></div>
+        <div class="ci"><div class="cdot cda"></div><span>Work auth support (H-1B + OPT continuation) +15</span></div>
+        <div class="ci"><div class="cdot cda"></div><span>Annual bonus &ge; $30K +10</span></div>
+        <div class="ci"><div class="cdot cda"></div><span>Tuition reimbursement (~$150K) +10</span></div>
+        <div class="ci"><div class="cdot cda"></div><span>LATAM market exposure +5</span></div>
       </div>
-      <div class="crit-card">
-        <div class="crit-title">Role types to scan</div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>Technical Program Manager (TPM)</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>AI Product Manager</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>Enterprise AI Strategist / Deployment</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>Strategic Projects / Operations (AI)</span></div>
+      <div class="cc">
+        <div class="ct_">Role types to scan</div>
+        <div class="ci"><div class="cdot cdg"></div><span>Technical Program Manager (TPM)</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>AI Product Manager</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>Enterprise AI Strategist / Deployment</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>Strategic Projects / Operations (AI)</span></div>
       </div>
-      <div class="crit-card">
-        <div class="crit-title">Timeline</div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>3 offers in hand by June 15, 2026</span></div>
-        <div class="crit-item"><div class="cdot cdot-g"></div><span>15–20 strong apps in next 3 weeks</span></div>
-        <div class="crit-item"><div class="cdot cdot-a"></div><span>First-round screens by mid-May</span></div>
-        <div class="crit-item"><div class="cdot cdot-a"></div><span>Final rounds in early June</span></div>
+      <div class="cc">
+        <div class="ct_">Goal</div>
+        <div class="ci"><div class="cdot cdg"></div><span>3 offers &ge; $180K in NYC by May 15</span></div>
+        <div class="ci"><div class="cdot cdg"></div><span>15–20 strong apps in next 3 weeks</span></div>
+        <div class="ci"><div class="cdot cda"></div><span><strong>Enterprise delivery</strong> — big tech, finance, consulting</span></div>
+        <div class="ci"><div class="cdot cda"></div><span><strong>Founder-operator</strong> — startup, early-stage</span></div>
       </div>
     </div>
   </div>
 
   <!-- ADD ROLE -->
-  <div id="page-add" class="page">
-    <div class="page-title">Add a Role</div>
-    <div class="page-sub">Track a new application manually.</div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Job title</label><input type="text" id="a-title" placeholder="e.g. Sr. TPM GenAI"></div><div class="form-group"><label class="form-label">Company</label><input type="text" id="a-company" placeholder="e.g. Google"></div></div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Base salary (USD)</label><input type="text" id="a-salary" placeholder="e.g. 220000"></div><div class="form-group"><label class="form-label">Stage</label><select id="a-stage"><option value="applied">Applied</option><option value="screening">Screening</option><option value="interview">Interview</option><option value="offer">Offer</option></select></div></div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Job URL</label><input type="text" id="a-url" placeholder="https://..."></div></div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Notes</label><textarea id="a-notes" rows="3" placeholder="Referral, deadline, contact..."></textarea></div></div>
-    <div style="margin-top:8px"><button class="btn btn-p" onclick="submitAdd()">Add to pipeline</button><button class="btn" style="margin-left:8px" onclick="nav('pipeline',null)">Cancel</button></div>
+  <div id="pg-add" class="pg">
+    <div class="pt_">Add a Role</div>
+    <div class="ps_">Track a new application manually.</div>
+    <div class="fr"><div class="fg"><label class="fl">Job title</label><input type="text" id="a-title" placeholder="e.g. Sr. TPM GenAI"></div><div class="fg"><label class="fl">Company</label><input type="text" id="a-co" placeholder="e.g. Google"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Base salary (USD)</label><input type="text" id="a-sal" placeholder="e.g. 220000"></div><div class="fg"><label class="fl">Stage</label><select id="a-st"><option value="applied">Applied</option><option value="screening">Screening</option><option value="interview">Interview</option><option value="offer">Offer</option></select></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Job URL</label><input type="text" id="a-url" placeholder="https://..."></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Notes</label><textarea id="a-notes" rows="3" placeholder="Referral, deadline, contact name, next step..."></textarea></div></div>
+    <div style="margin-top:8px">
+      <button class="btn bp" onclick="submitAdd()">Add to pipeline</button>
+      <button class="btn" style="margin-left:8px" onclick="nav('pipe',null)">Cancel</button>
+    </div>
   </div>
 
   <!-- SETTINGS -->
-  <div id="page-settings" class="page">
-    <div class="page-title">Settings</div>
-    <div class="page-sub">Your API key and preferences. Never sent anywhere except Anthropic.</div>
-    <div class="settings-section">
-      <div class="settings-title">Anthropic API key</div>
-      <div class="settings-row">
-        <div class="form-group"><input type="password" id="api-key-input" placeholder="sk-ant-..."></div>
-        <button class="btn btn-p" onclick="saveApiKey()" style="white-space:nowrap">Save key</button>
+  <div id="pg-set" class="pg">
+    <div class="pt_">Settings</div>
+    <div class="ps_">Your API key and preferences. Stored only in your browser.</div>
+    <div style="margin-bottom:24px">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">Anthropic API key</div>
+      <div style="display:flex;gap:10px;align-items:flex-end">
+        <div style="flex:1"><input type="password" id="api-key" placeholder="sk-ant-..."></div>
+        <button class="btn bp" onclick="saveKey()" style="white-space:nowrap">Save key</button>
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px">Stored only in your browser's localStorage. Required for AI Generate.</div>
+      <div style="font-size:11px;color:var(--mu);margin-top:8px">Required for AI Generate. Never sent anywhere except Anthropic's API.</div>
     </div>
-    <div class="divider"></div>
-    <div class="settings-section">
-      <div class="settings-title">Data</div>
-      <button class="btn btn-danger btn-sm" onclick="clearData()">Clear all pipeline data</button>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px">This deletes your applications and pipeline. Irreversible.</div>
+    <div class="dv"></div>
+    <div style="margin-bottom:24px">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">Deadline</div>
+      <div style="display:flex;gap:10px;align-items:flex-end">
+        <div style="flex:1"><input type="text" id="dl-input" placeholder="YYYY-MM-DD e.g. 2026-05-15"></div>
+        <button class="btn bp" onclick="saveDl()" style="white-space:nowrap">Save</button>
+      </div>
     </div>
-    <div class="divider"></div>
-    <div class="settings-section">
-      <div class="settings-title">Session</div>
-      <button class="btn btn-sm" onclick="logout()">↩ Log out</button>
+    <div class="dv"></div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">Data</div>
+      <button class="btn bd_ bs" onclick="clearData()">Clear all pipeline data</button>
+      <div style="font-size:11px;color:var(--mu);margin-top:8px">Deletes your applications and pipeline. Irreversible.</div>
+      <div style="margin-top:16px"><button class="btn bs" onclick="logout()">↩ Log out</button></div>
     </div>
   </div>
 
 </main>
 </div>
 
-<!-- AI MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div class="modal-title" id="modal-title">Generate</div>
-    <div id="modal-body"></div>
-  </div>
-</div>
-
 <script>
-// ── AUTH GUARD ──
-const SESSION_KEY = "nbj_session";
-if (!sessionStorage.getItem(SESSION_KEY)) {
-  window.location.href = "index.html";
-}
+// ── AUTH ──────────────────────────────────────────────────────────────────
+if (!sessionStorage.getItem('nbj_session')) window.location.href = 'index.html';
 
-// ── STORE (encrypted localStorage) ──
-const Store = {
-  key() { return sessionStorage.getItem(SESSION_KEY) || "nbj"; },
-  enc(str) { let o=""; for(let i=0;i<str.length;i++) o+=String.fromCharCode(str.charCodeAt(i)^this.key().charCodeAt(i%this.key().length)); try{return btoa(o);}catch{return btoa(encodeURIComponent(o));} },
-  dec(s) { try{ const d=atob(s); let o=""; for(let i=0;i<d.length;i++) o+=String.fromCharCode(d.charCodeAt(i)^this.key().charCodeAt(i%this.key().length)); return o; }catch{return null;} },
-  set(k,v){ localStorage.setItem("nbj_"+k, this.enc(JSON.stringify(v))); },
-  get(k,fb=null){ const s=localStorage.getItem("nbj_"+k); if(!s) return fb; const d=this.dec(s); if(!d) return fb; try{return JSON.parse(d);}catch{return fb;} },
-  del(k){ localStorage.removeItem("nbj_"+k); },
+// ── STORE ─────────────────────────────────────────────────────────────────
+const S = {
+  k(){ return sessionStorage.getItem('nbj_session')||'nbj'; },
+  enc(s){ const k=this.k(); let o=''; for(let i=0;i<s.length;i++) o+=String.fromCharCode(s.charCodeAt(i)^k.charCodeAt(i%k.length)); try{return btoa(o);}catch{return btoa(unescape(encodeURIComponent(o)));} },
+  dec(s){ const k=this.k(); try{const d=atob(s);let o='';for(let i=0;i<d.length;i++) o+=String.fromCharCode(d.charCodeAt(i)^k.charCodeAt(i%k.length));return o;}catch{return null;} },
+  set(k,v){ localStorage.setItem('nbj_'+k,this.enc(JSON.stringify(v))); },
+  get(k,fb=null){ const s=localStorage.getItem('nbj_'+k);if(!s) return fb;const d=this.dec(s);if(!d) return fb;try{return JSON.parse(d);}catch{return fb;} },
+  del(k){ localStorage.removeItem('nbj_'+k); },
 };
 
-// ── COUNTDOWN ──
+// ── COUNTDOWN ──────────────────────────────────────────────────────────────
 function calcCD() {
-  const d = Math.ceil((new Date("2026-06-15") - new Date()) / 864e5);
-  document.getElementById("cd").textContent = Math.max(0,d);
+  const dl=S.get('deadline','2026-05-15');
+  const d=Math.ceil((new Date(dl)-new Date())/864e5);
+  document.getElementById('cdn').textContent=Math.max(0,d);
+  document.getElementById('cdt').textContent='→ '+dl;
 }
 calcCD();
 
-// ── NAVIGATION ──
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
 function nav(id, el) {
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
-  document.getElementById("page-"+id).classList.add("active");
-  if(el) el.classList.add("active");
-  if(id==="pipeline") renderPipeline();
-  if(id==="dashboard"||id==="pipeline") updateStats();
-  if(id==="settings") loadSettings();
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));
+  document.getElementById('pg-'+id).classList.add('act');
+  if(el) el.classList.add('act');
+  else document.querySelectorAll('.ni').forEach(n=>{ if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('act'); });
+  if(id==='pipe') renderPipe();
+  if(id==='dash'||id==='pipe') updateStats();
+  if(id==='set') loadSettings();
 }
 
-// ── PIPELINE ──
-const STAGES = ["applied","screening","interview","offer","rejected"];
+// ── PIPELINE ───────────────────────────────────────────────────────────────
+const STAGES = [['ap','applied'],['sc','screening'],['in','interview'],['of','offer'],['rj','rejected']];
 
-function addRole(title,company,url,salary) {
-  const data = Store.get("pipeline",[]);
-  data.push({id:Date.now()+"",title,company,url,salary,stage:"applied",date:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"}),notes:""});
-  Store.set("pipeline",data);
-  updateStats(); renderPipeline();
-  alert("✓ Added to pipeline: "+title);
+function addRole(title,co,url,salary) {
+  const data=S.get('pipeline',[]);
+  data.push({id:Date.now()+'',title,co,url,salary,stage:'applied',date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),notes:''});
+  S.set('pipeline',data);
+  updateStats(); renderPipe();
+  alert('✓ Added: '+title);
 }
 
-function renderPipeline() {
-  const data = Store.get("pipeline",[]);
-  STAGES.forEach(s => {
-    const items = data.filter(d=>d.stage===s);
-    const el = document.getElementById("cnt-"+s);
-    if(el) el.textContent = items.length;
-    const cont = document.getElementById("cards-"+s);
-    if(!cont) return;
-    if(!items.length){ cont.innerHTML='<div style="font-size:11px;color:var(--muted2);padding:8px 0">—</div>'; return; }
-    cont.innerHTML = items.map(item=>`
-      <div class="pipe-card">
-        <div class="pc-title">${item.title}</div>
-        <div class="pc-co">${item.company}</div>
-        ${item.salary?`<div class="pc-comp">$${Math.round(item.salary/1000)}K</div>`:''}
-        <div class="pc-date">${item.date}</div>
-        <div class="pc-acts">
-          ${s!=="screening"?`<button class="btn btn-sm" onclick="move('${item.id}','screening')">→Screen</button>`:''}
-          ${s!=="interview"?`<button class="btn btn-sm" onclick="move('${item.id}','interview')">→Interview</button>`:''}
-          ${s!=="offer"?`<button class="btn btn-sm" style="color:var(--green)" onclick="move('${item.id}','offer')">→Offer</button>`:''}
-          <button class="btn btn-sm btn-danger" onclick="move('${item.id}','rejected')">✕</button>
+function renderPipe() {
+  const data=S.get('pipeline',[]);
+  STAGES.forEach(([k,s])=>{
+    const items=data.filter(d=>d.stage===s);
+    const el=document.getElementById('cnt-'+k); if(el) el.textContent=items.length;
+    const cont=document.getElementById('cds-'+k); if(!cont) return;
+    if(!items.length){cont.innerHTML='<div style="font-size:11px;color:var(--mu2);padding:8px 0">—</div>';return;}
+    cont.innerHTML=items.map(item=>`
+      <div class="picard">
+        <div class="pct_">${item.title}</div>
+        <div class="pco">${item.co}</div>
+        ${item.salary?`<div class="pcp">$${Math.round(item.salary/1000)}K</div>`:''}
+        <div class="pcd">${item.date}</div>
+        <div class="pca">
+          ${s!=='screening'?`<button class="btn bs" onclick="move('${item.id}','screening')">→Screen</button>`:''}
+          ${s!=='interview'?`<button class="btn bs" onclick="move('${item.id}','interview')">→Interview</button>`:''}
+          ${s!=='offer'?`<button class="btn bs" style="color:var(--gn)" onclick="move('${item.id}','offer')">→Offer</button>`:''}
+          <button class="btn bs bd_" onclick="move('${item.id}','rejected')">✕</button>
         </div>
       </div>`).join('');
   });
-  // all roles table
-  const wrap = document.getElementById("all-roles-table");
-  if(!wrap) return;
-  if(!data.length){ wrap.innerHTML=''; return; }
-  wrap.innerHTML=`<div class="sec-head" style="margin-top:20px"><span class="sec-title">All roles</span></div>
+  const wrap=document.getElementById('all-roles'); if(!wrap) return;
+  if(!data.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;margin-top:20px"><span class="st_">All roles</span></div>
     <table><thead><tr><th>Role</th><th>Company</th><th>Comp</th><th>Stage</th><th>Date</th><th>Move</th></tr></thead>
     <tbody>${data.map(item=>`<tr>
-      <td>${item.url?`<a class="job-title" href="${item.url}" target="_blank" style="font-size:12px">${item.title} ↗</a>`:item.title}</td>
-      <td>${item.company}</td>
+      <td>${item.url?`<a class="jtl" href="${item.url}" target="_blank" style="font-size:12px">${item.title} ↗</a>`:item.title}</td>
+      <td>${item.co}</td>
       <td>${item.salary?'$'+Math.round(item.salary/1000)+'K':'—'}</td>
       <td><span class="tag ${item.stage==='offer'?'tg':item.stage==='interview'?'tb':item.stage==='rejected'?'tr':'tm'}">${item.stage}</span></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px">${item.date}</td>
       <td><select onchange="move('${item.id}',this.value)" style="font-size:10px;padding:3px 5px;width:auto">
-        ${STAGES.map(s=>`<option value="${s}"${s===item.stage?' selected':''}>${s}</option>`).join('')}
-      </select></td></tr>`).join('')}
-    </tbody></table>`;
+        ${[['applied','Applied'],['screening','Screening'],['interview','Interview'],['offer','Offer'],['rejected','Closed']].map(([v,l])=>`<option value="${v}"${v===item.stage?' selected':''}>${l}</option>`).join('')}
+      </select></td></tr>`).join('')}</tbody></table>`;
 }
 
 function move(id,stage) {
-  const data = Store.get("pipeline",[]);
-  const item = data.find(d=>d.id===id);
-  if(item){ item.stage=stage; Store.set("pipeline",data); renderPipeline(); }
+  const data=S.get('pipeline',[]);
+  const item=data.find(d=>d.id===id);
+  if(item){item.stage=stage;S.set('pipeline',data);renderPipe();}
 }
 
 function updateStats() {
-  const data = Store.get("pipeline",[]);
-  [["applied","s-applied","p-applied"],["screening","s-screen","p-screen"],
-   ["interview","s-interview","p-interview"],["offer","s-offer","p-offer"]].forEach(([s,a,b])=>{
+  const data=S.get('pipeline',[]);
+  [['applied','s-ap','p-ap'],['screening','s-sc','p-sc'],['interview','s-in','p-in'],['offer','s-of','p-of']].forEach(([s,a,b])=>{
     const n=data.filter(d=>d.stage===s).length;
-    [a,b].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n;});
+    [a,b].forEach(id=>{const el=document.getElementById(id);if(el) el.textContent=n;});
   });
 }
 
-// ── ADD ROLE ──
+// ── ADD ROLE ───────────────────────────────────────────────────────────────
 function submitAdd() {
-  const title=document.getElementById("a-title").value.trim();
-  const company=document.getElementById("a-company").value.trim();
-  if(!title||!company){alert("Title and company required.");return;}
-  const salary=parseInt(document.getElementById("a-salary").value)||0;
-  const stage=document.getElementById("a-stage").value;
-  const url=document.getElementById("a-url").value.trim();
-  const notes=document.getElementById("a-notes").value.trim();
-  const data=Store.get("pipeline",[]);
-  data.push({id:Date.now()+"",title,company,url,salary,stage,notes,date:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"})});
-  Store.set("pipeline",data);
-  ["a-title","a-company","a-salary","a-url","a-notes"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("a-stage").value="applied";
-  nav("pipeline",null);
+  const title=document.getElementById('a-title').value.trim();
+  const co=document.getElementById('a-co').value.trim();
+  if(!title||!co){alert('Title and company required.');return;}
+  const sal=parseInt(document.getElementById('a-sal').value)||0;
+  const stage=document.getElementById('a-st').value;
+  const url=document.getElementById('a-url').value.trim();
+  const notes=document.getElementById('a-notes').value.trim();
+  const data=S.get('pipeline',[]);
+  data.push({id:Date.now()+'',title,co,url,salary:sal,stage,notes,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});
+  S.set('pipeline',data);
+  ['a-title','a-co','a-sal','a-url','a-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('a-st').value='applied';
+  nav('pipe',null);
 }
 
-// ── AI GENERATE ──
-const GEN_CONTEXTS = {
-  deepmind:{title:"Sr. PM Applied AI",company:"Google DeepMind",salary:"$256K–$278K",voice:"enterprise",jd:"Senior product manager for DeepMind's applied AI products. Lead cross-functional teams to ship GenAI features at Google scale. Deep understanding of ML systems required."},
-  flow:{title:"PM Operator Experience",company:"Flow",salary:"$180K–$230K",voice:"startup",jd:"Own the product for property operators on Flow's platform. Build 0-to-1 features for a fast-growing proptech startup backed by a16z. Comfort with ambiguity required."},
-  macquarie:{title:"Digital Solutions Owner Real Assets AI",company:"Macquarie",salary:"$260K–$290K",voice:"enterprise",jd:"Lead digital transformation and AI deployment for Macquarie's real assets business. Cross-functional coordination across engineering, legal, and fund management teams."},
-  accenture:{title:"AI Native Transformation Manager",company:"Accenture",salary:"$180K+ (verify)",voice:"enterprise",jd:"Lead AI transformation programs for enterprise clients. Drive AI strategy, implementation, and change management across industries."},
+// ── AI GENERATE ────────────────────────────────────────────────────────────
+const CTXS = {
+  deepmind:{title:'Sr. PM Applied AI',co:'Google DeepMind',sal:'$256K–$278K',voice:'enterprise',jd:'Senior PM for DeepMind applied AI products. Lead cross-functional teams shipping GenAI features at Google scale. Deep ML understanding required. NYC.'},
+  flow:{title:'PM Operator Experience',co:'Flow',sal:'$180K–$230K',voice:'startup',jd:'Own the product for property operators on Flow platform. 0-to-1 feature building for proptech startup backed by a16z. Comfort with ambiguity required. NYC.'},
+  macquarie:{title:'Digital Solutions Owner Real Assets AI',co:'Macquarie',sal:'$260K–$290K',voice:'enterprise',jd:'Lead digital transformation and AI deployment for Macquarie real assets. Cross-functional coordination across engineering, legal, and fund management. NYC.'},
+  accenture:{title:'AI Transformation Manager',co:'Accenture',sal:'TBD',voice:'enterprise',jd:'Lead AI transformation programs for enterprise clients. Drive AI strategy, implementation, and change management. NYC consulting role.'},
 };
 
 function openGen(key) {
-  const ctx = GEN_CONTEXTS[key]||{};
-  document.getElementById("gen-title").value = ctx.title||"";
-  document.getElementById("gen-company").value = ctx.company||"";
-  document.getElementById("gen-salary").value = ctx.salary||"";
-  document.getElementById("gen-voice").value = ctx.voice||"enterprise";
-  document.getElementById("gen-jd").value = ctx.jd||"";
-  document.getElementById("gen-output").style.display="none";
-  nav("generate",null);
-  // scroll to top
-  document.querySelector(".main").scrollTop=0;
+  const ctx=CTXS[key]||{};
+  document.getElementById('g-title').value=ctx.title||'';
+  document.getElementById('g-company').value=ctx.co||'';
+  document.getElementById('g-salary').value=ctx.sal||'';
+  document.getElementById('g-voice').value=ctx.voice||'enterprise';
+  document.getElementById('g-jd').value=ctx.jd||'';
+  document.getElementById('g-out').style.display='none';
+  nav('gen',null);
+  document.querySelector('.mn').scrollTop=0;
 }
 
-async function runGenerate() {
-  const apiKey = Store.get("api_key","");
-  if(!apiKey){ alert("Add your Anthropic API key in Settings first."); nav("settings",null); return; }
+// Background used in all AI prompts — your real experience, stays private in the dashboard
+const BG = `AI deployment operator with 8+ years. CPO and co-founder of an AI-powered B2B SaaS startup — delivered a 1-year PoC with a Fortune 500 retail client across the US, Canada, and Mexico; generated over $1M ARR pipeline across 40 demos with Louis Vuitton, COS, Macy's, Selfridges, and JCPenney. AI Project Lead at the leading insurer in Peru (Rimac Seguros, Grupo BRECA) — deployed the first WhatsApp AI chatbot in Peru, scaling from 0 to 1M conversations in 6 months, increased conversion 30% vs web/app, scaled AI org from 8 to 100 people, generated $5M+ in revenue impact (+10%). PM at Interbank (top-5 bank in Peru, NYSE: IFS) — shipped LLM content guardrails for banking app and a cross-sell recommendation engine that increased product uptake 22% in 6 months. Cornell Tech MBA 2026 (STEM), Forte Fellow. Number 1 GPA across 534 Economics students at UPC for two semesters, graduated top 5%. EmpireHacks 2026 organizer — 125 participants, sponsors including Anthropic, McKinsey, AWS. Python, SQL, LangChain, AWS, GCP, Pinecone, TensorFlow.`;
 
-  const title=document.getElementById("gen-title").value.trim();
-  const company=document.getElementById("gen-company").value.trim();
-  const salary=document.getElementById("gen-salary").value.trim();
-  const voice=document.getElementById("gen-voice").value;
-  const jd=document.getElementById("gen-jd").value.trim();
-  const type=document.getElementById("gen-type").value;
+async function runGen() {
+  const apiKey=S.get('api_key','');
+  if(!apiKey){alert('Add your Anthropic API key in Settings first.');nav('set',null);return;}
+  const title=document.getElementById('g-title').value.trim();
+  const co=document.getElementById('g-company').value.trim();
+  const sal=document.getElementById('g-salary').value.trim();
+  const voice=document.getElementById('g-voice').value;
+  const jd=document.getElementById('g-jd').value.trim();
+  const type=document.getElementById('g-type').value;
+  if(!title||!co){alert('Enter role title and company.');return;}
 
-  if(!title||!company){alert("Enter role title and company.");return;}
-
-  const voiceDesc = voice==="startup"
-    ? "founder-operator: lead with building, owning outcomes, comfort with ambiguity. Show you run toward problems."
-    : "enterprise delivery expert: lead with cross-functional execution, scale, reliability, measurable impact.";
+  const vd = voice==='startup'
+    ? 'founder-operator: lead with building from 0, owning outcomes, comfort with ambiguity. Show you run toward problems not away from them.'
+    : 'enterprise delivery expert: lead with cross-functional execution, measurable impact, and reliability at scale. 3 tight paragraphs, metrics first.';
 
   const prompts = {
-    cover: `Write a cover letter for this role. 3 tight paragraphs. Voice: ${voiceDesc}. No generic openers. Lead with the strongest proof point.\n\nRole: ${title} at ${company}${salary?" ("+salary+")":""}\nJD: ${jd}\n\nBackground: Claudia Davila Rios. CPO & co-founder, Sociate AI — delivered $1M+ ARR pipeline with Fortune 500 clients (H&M, Louis Vuitton, Macy's). AI TPM at Rimac Seguros — deployed WhatsApp AI chatbot (1M conversations in 6 months), scaled AI org 8→100 people. PM at Interbank — LLM guardrails, recommendation engine (+22% cross-sell). Cornell Tech MBA 2026 (STEM). #1 GPA UPC Economics. Python, SQL, LangChain, AWS, GCP. L-2 EAD work authorization.`,
-    bullets: `Write 5 tailored resume bullets for this role. Bold the impact metric at the end of each bullet. Use the XYZ formula (accomplished X as measured by Y by doing Z). Voice: ${voiceDesc}.\n\nRole: ${title} at ${company}\nJD: ${jd}\n\nDraw from: Sociate AI (H&M PoC, $1M ARR pipeline, 40 demos, 20-person distributed team), Rimac Seguros (WhatsApp chatbot, $5M revenue impact, 0→100 AI org), Interbank (LLM guardrails, +22% cross-sell, A/B testing). Keep each bullet under 2 lines.`,
-    prep: `Give me interview prep for this role. Include: (1) 3 things to research about the company before the interview, (2) 3 likely interview questions with my best answer angle, (3) 2 questions I should ask them.\n\nRole: ${title} at ${company}\nJD: ${jd}\n\nMy background: AI deployment operator with 8+ years. Sociate AI CPO/co-founder, Rimac AI TPM, Interbank PM. Cornell Tech MBA. LATAM enterprise AI track record.`,
+    cover: `Write a cover letter for this role. 3 tight paragraphs. Voice: ${vd}. No generic openers — lead with the strongest proof point. No em dashes anywhere. No placeholder text.\n\nRole: ${title} at ${co}${sal?' ('+sal+')':''}\nJD: ${jd}\n\nBackground: ${BG}`,
+    bullets: `Write 5 tailored resume bullets for this role. Bold the impact metric. XYZ formula (accomplished X as measured by Y by doing Z). Voice: ${vd}. Each bullet under 2 lines. No em dashes.\n\nRole: ${title} at ${co}\nJD: ${jd}\n\nBackground: ${BG}`,
+    prep: `Interview prep for this role.\n1. Three things to research about the company and team before the interview.\n2. Three likely interview questions with my strongest answer angles.\n3. Two sharp questions I should ask them.\n\nRole: ${title} at ${co}\nJD: ${jd}\n\nMy background: ${BG}`,
   };
 
-  document.getElementById("gen-output").style.display="block";
-  document.getElementById("gen-text").className="ai-out ai-loading";
-  document.getElementById("gen-text").textContent="Generating with Claude...";
+  document.getElementById('g-out').style.display='block';
+  document.getElementById('g-text').className='ao al';
+  document.getElementById('g-text').textContent='Generating with Claude...';
 
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompts[type]}]})
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompts[type]}]})
     });
-    const data = await res.json();
-    if(data.error){ document.getElementById("gen-text").textContent="Error: "+data.error.message; return; }
-    const text = data.content?.find(b=>b.type==="text")?.text || "No output.";
-    document.getElementById("gen-text").className="ai-out";
-    document.getElementById("gen-text").textContent=text;
+    const data=await res.json();
+    if(data.error){document.getElementById('g-text').textContent='Error: '+data.error.message;return;}
+    const text=data.content?.find(b=>b.type==='text')?.text||'No output.';
+    document.getElementById('g-text').className='ao';
+    document.getElementById('g-text').textContent=text;
   } catch(e) {
-    document.getElementById("gen-text").className="ai-out";
-    document.getElementById("gen-text").textContent="Error: "+e.message+"\n\nCheck your API key in Settings.";
+    document.getElementById('g-text').className='ao';
+    document.getElementById('g-text').textContent='Error: '+e.message+'\n\nCheck your API key in Settings.';
   }
 }
 
-function copyOutput() {
-  navigator.clipboard.writeText(document.getElementById("gen-text").textContent);
-}
+function copyOut() { navigator.clipboard.writeText(document.getElementById('g-text').textContent); }
 
-// ── MODAL ──
-function openModal(title,body) {
-  document.getElementById("modal-title").textContent=title;
-  document.getElementById("modal-body").innerHTML=body;
-  document.getElementById("modal").classList.add("open");
-}
-function closeModal(){ document.getElementById("modal").classList.remove("open"); }
-document.getElementById("modal").addEventListener("click",e=>{ if(e.target===e.currentTarget) closeModal(); });
-
-// ── SETTINGS ──
+// ── SETTINGS ───────────────────────────────────────────────────────────────
 function loadSettings() {
-  const k = Store.get("api_key","");
-  document.getElementById("api-key-input").value = k ? "sk-ant-..." : "";
+  const k=S.get('api_key','');
+  document.getElementById('api-key').value=k?'sk-ant-...':'';
+  document.getElementById('dl-input').value=S.get('deadline','2026-05-15');
 }
-function saveApiKey() {
-  const v = document.getElementById("api-key-input").value.trim();
-  if(!v||!v.startsWith("sk-")){ alert("Paste a valid Anthropic API key (starts with sk-)."); return; }
-  Store.set("api_key",v);
-  alert("API key saved.");
+function saveKey() {
+  const v=document.getElementById('api-key').value.trim();
+  if(!v||!v.startsWith('sk-')){alert('Paste a valid Anthropic API key (starts with sk-).');return;}
+  S.set('api_key',v); alert('API key saved.');
+}
+function saveDl() {
+  const v=document.getElementById('dl-input').value.trim();
+  if(!v) return;
+  S.set('deadline',v); calcCD(); alert('Deadline saved.');
 }
 function clearData() {
-  if(confirm("Delete ALL pipeline data? This cannot be undone.")) {
-    Store.del("pipeline");
-    updateStats(); renderPipeline();
-    alert("Pipeline cleared.");
+  if(confirm('Delete ALL pipeline data? Irreversible.')) {
+    S.del('pipeline'); updateStats(); renderPipe(); alert('Pipeline cleared.');
   }
 }
+function logout() { sessionStorage.removeItem('nbj_session'); window.location.href='index.html'; }
 
-// ── LOGOUT ──
-function logout() {
-  sessionStorage.removeItem(SESSION_KEY);
-  window.location.href="index.html";
-}
-
-// ── INIT ──
+// ── INIT ───────────────────────────────────────────────────────────────────
 updateStats();
-if(document.getElementById("api-key-input")) loadSettings();
 </script>
 </body>
 </html>
