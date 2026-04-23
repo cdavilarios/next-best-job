@@ -315,7 +315,7 @@ footer{border-top:1px solid var(--bd);padding:40px 0;margin-top:80px;}
 // Replace PASSWORD_HASH with SHA-256 of your password.
 // Mac:   echo -n "yourpassword" | shasum -a 256
 // Linux: echo -n "yourpassword" | sha256sum
-const PASSWORD_HASH = 'YOUR_HASH_HERE';
+const PASSWORD_HASH = '000e2c722b97fbe6c21bbf7e4d0761a6babe211634c17038416217e05220f500';
 
 async function sha256(s) {
   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
@@ -340,3 +340,4 @@ document.getElementById('gate').addEventListener('click', e => { if(e.target===e
 </script>
 </body>
 </html>
+
