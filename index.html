@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>next-best-job — AI Job Search Agent</title>
+<meta name="description" content="An AI agent that scans job portals, scores roles, and prepares application materials. Built by Claudia Davila Rios while actively using it.">
+<meta property="og:title" content="next-best-job by Claudia Davila Rios">
+<meta property="og:description" content="AI-powered job search agent — built while actively using it.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0e; --surface: #141416; --surface2: #1c1c20; --surface3: #242428;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.13);
+  --text: #f0ede8; --muted: #7a7870; --muted2: #5a5850;
+  --accent: #c8b89a; --accent2: #e8d5b0;
+  --green: #4caf7d; --green-bg: rgba(76,175,125,0.1);
+  --amber: #e5a84b; --amber-bg: rgba(229,168,75,0.12);
+  --blue: #6ba3d6; --blue-bg: rgba(107,163,214,0.1);
+  --purple: #9b8fc4; --purple-bg: rgba(155,143,196,0.1);
+  --red: #e05c5c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden;}
+
+/* grain */
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5;}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:28px 0;border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'DM Mono',monospace;font-size:15px;color:var(--accent);letter-spacing:-0.3px;}
+.nav-logo span{color:var(--muted2);}
+.nav-right{display:flex;gap:20px;align-items:center;}
+.nav-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color .15s;}
+.nav-link:hover{color:var(--text);}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;padding:9px 20px;border-radius:8px;cursor:pointer;transition:all .15s;text-decoration:none;border:none;}
+.btn-primary{background:var(--accent);color:var(--bg);}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent2);}
+
+/* HERO */
+.hero{padding:100px 0 80px;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:.15em;margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--amber);}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(42px,7vw,72px);line-height:1.03;letter-spacing:-1.5px;color:var(--accent2);margin-bottom:24px;}
+h1 em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:17px;color:var(--muted);max-width:580px;line-height:1.75;margin-bottom:40px;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.hero-note{font-size:12px;color:var(--muted2);margin-top:12px;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:64px 0;}
+.stat{padding:28px 20px;text-align:center;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:'DM Mono',monospace;font-size:30px;font-weight:500;color:var(--accent2);}
+.stat-l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+
+/* SECTION */
+.section{margin:80px 0;}
+.section-eyebrow{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.section-eyebrow::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,40px);letter-spacing:-.5px;color:var(--accent2);margin-bottom:12px;}
+.section-sub{font-size:15px;color:var(--muted);max-width:560px;margin-bottom:40px;}
+
+/* ARCHITECTURE */
+.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;}
+.arch-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;transition:border-color .2s;}
+.arch-card:hover{border-color:var(--border2);}
+.arch-card.full{grid-column:span 2;}
+.arch-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);margin-bottom:10px;}
+.arch-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.arch-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+.arch-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+.pill{font-size:11px;padding:3px 9px;border-radius:5px;font-weight:600;}
+.pill-green{background:var(--green-bg);color:var(--green);}
+.pill-blue{background:var(--blue-bg);color:var(--blue);}
+.pill-amber{background:var(--amber-bg);color:var(--amber);}
+.pill-purple{background:var(--purple-bg);color:var(--purple);}
+
+/* CODE BLOCK */
+.code-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:24px 0;}
+.code-topbar{background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:8px;}
+.dot{width:10px;height:10px;border-radius:50%;}
+.dot-r{background:#ff5f57;}.dot-y{background:#ffbd2e;}.dot-g{background:#28c840;}
+.code-file{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px;}
+pre{padding:20px;overflow-x:auto;font-family:'DM Mono',monospace;font-size:12px;line-height:1.7;color:var(--accent);}
+.c-muted{color:var(--muted);}
+.c-green{color:var(--green);}
+.c-blue{color:var(--blue);}
+.c-amber{color:var(--amber);}
+.c-text{color:var(--text);}
+
+/* DEMO PREVIEW */
+.demo-window{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.demo-topbar{background:var(--surface2);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:8px;}
+.demo-url{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:10px;}
+.demo-inner{display:flex;min-height:340px;}
+.demo-sidebar{width:170px;min-width:170px;background:var(--surface2);border-right:1px solid var(--border);padding:16px 0;}
+.d-logo{padding:0 14px 14px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.d-logo-n{font-family:'DM Serif Display',serif;font-size:13px;color:var(--accent2);}
+.d-logo-s{font-size:9px;color:var(--muted2);text-transform:uppercase;letter-spacing:.1em;}
+.d-nav{padding:7px 14px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:7px;border-left:2px solid transparent;}
+.d-nav.active{color:var(--accent2);background:rgba(200,184,154,0.05);border-left-color:var(--accent);}
+.d-count{margin-left:auto;font-family:'DM Mono',monospace;background:var(--surface3);padding:1px 6px;border-radius:8px;font-size:9px;}
+.demo-main{flex:1;padding:24px;}
+.d-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--accent2);margin-bottom:4px;}
+.d-sub{font-size:11px;color:var(--muted2);margin-bottom:18px;}
+.d-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+.d-stat{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.d-stat-n{font-family:'DM Mono',monospace;font-size:18px;color:var(--text);}
+.d-stat-n.green{color:var(--green);}
+.d-stat-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+.d-job{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;}
+.d-job-row{display:flex;justify-content:space-between;align-items:flex-start;}
+.d-job-title{font-size:12px;font-weight:700;color:var(--text);}
+.d-job-co{font-size:10px;color:var(--muted);margin-top:2px;}
+.d-job-tags{display:flex;gap:4px;margin-top:7px;}
+.d-score{font-family:'DM Mono',monospace;font-size:16px;color:var(--green);font-weight:500;}
+.d-tag{font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700;}
+
+/* PRIVACY TABLE */
+.privacy-table{width:100%;border-collapse:collapse;}
+.privacy-table th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);}
+.privacy-table td{padding:13px 16px;border-bottom:1px solid var(--border);font-size:13px;}
+.privacy-table tr:last-child td{border-bottom:none;}
+.privacy-table tr:hover td{background:rgba(255,255,255,0.015);}
+.check{color:var(--green);font-size:15px;}
+.lock{color:var(--amber);font-size:14px;}
+
+/* HOW TO */
+.steps{counter-reset:step;margin:0;}
+.step{display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);counter-increment:step;}
+.step:last-child{border-bottom:none;}
+.step-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);min-width:24px;padding-top:3px;}
+.step-num::before{content:counter(step,decimal-leading-zero);}
+.step-content{flex:1;}
+.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+code{font-family:'DM Mono',monospace;font-size:12px;background:var(--surface2);padding:2px 7px;border-radius:4px;color:var(--accent);}
+
+/* PASSWORD GATE */
+.gate-overlay{position:fixed;inset:0;background:rgba(12,12,14,0.97);z-index:50;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s;}
+.gate-overlay.show{opacity:1;pointer-events:all;}
+.gate-box{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:40px;width:380px;max-width:95vw;}
+.gate-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--accent2);margin-bottom:8px;}
+.gate-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
+.gate-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Manrope',sans-serif;font-size:15px;padding:12px 16px;outline:none;transition:border-color .15s;margin-bottom:12px;}
+.gate-input:focus{border-color:var(--accent);}
+.gate-err{font-size:12px;color:var(--red);margin-bottom:12px;min-height:18px;}
+.gate-close{position:absolute;top:16px;right:20px;cursor:pointer;color:var(--muted);font-size:20px;background:none;border:none;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 0;margin-top:80px;}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-left{font-size:13px;color:var(--muted);}
+.footer-left a{color:var(--accent);text-decoration:none;}
+.footer-left a:hover{color:var(--accent2);}
+.footer-right{display:flex;gap:20px;}
+.footer-link{font-size:12px;color:var(--muted2);text-decoration:none;transition:color .15s;}
+.footer-link:hover{color:var(--text);}
+
+@media(max-width:600px){
+  .arch-grid{grid-template-columns:1fr;}.arch-card.full{grid-column:span 1;}
+  .stats{grid-template-columns:1fr 1fr;}.stat:nth-child(2){border-right:none;}
+  .demo-inner{flex-direction:column;}.demo-sidebar{width:100%;min-width:unset;}
+  h1{font-size:38px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="nav-logo">next<span>/</span>best<span>/</span>job</div>
+    <div class="nav-right">
+      <a class="nav-link" href="#architecture">How it works</a>
+      <a class="nav-link" href="#demo">Demo</a>
+      <a class="nav-link" href="https://github.com/cdavilarios/next-best-job" target="_blank">GitHub ↗</a>
+      <button class="btn btn-primary" onclick="openGate()">Open dashboard →</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">AI job search agent</div>
+    <h1>Stop scrolling.<br><em>Start applying.</em></h1>
+    <p class="hero-sub">An AI agent that scans job portals, scores roles against weighted criteria, and drafts your application materials — built and actively used during my own job search.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-primary" onclick="openGate()">Open dashboard →</button>
+      <a class="btn btn-ghost" href="https://github.com/cdavilarios/next-best-job" target="_blank">View source ↗</a>
+    </div>
+    <div class="hero-note">Dashboard is password-protected. Your data never leaves your browser.</div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="stat-n">54</div><div class="stat-l">Days to deadline</div></div>
+    <div class="stat"><div class="stat-n">$180K</div><div class="stat-l">Salary floor</div></div>
+    <div class="stat"><div class="stat-n">3</div><div class="stat-l">Target offers</div></div>
+    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Browser-local data</div></div>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <section class="section" id="architecture">
+    <div class="section-eyebrow">How it works</div>
+    <h2>Four-stage agent pipeline</h2>
+    <p class="section-sub">Each stage is a distinct module. You can see all the code in the repo. Your data stays private.</p>
+
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-num">01 — Scanner</div>
+        <div class="arch-title">Pull from job portals</div>
+        <div class="arch-desc">Uses Indeed and Dice APIs via MCP (Model Context Protocol) to search across role types simultaneously. Runs keyword combinations for TPM, AI PM, Enterprise AI, and Strategic Projects roles.</div>
+        <div class="arch-pills">
+          <span class="pill pill-blue">Indeed MCP</span>
+          <span class="pill pill-blue">Dice MCP</span>
+          <span class="pill pill-amber">MCP tool calls</span>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-num">02 — Scorer</div>
+        <div class="arch-title">Weighted criteria engine</div>
+        <div class="arch-desc">Every role is scored 0–100. Must-haves disqualify. Nice-to-haves add points. Criteria are in <code>src/criteria.js</code> — edit them to match your target profile.</div>
+        <div class="arch-pills">
+          <span class="pill pill-green">Must-haves</span>
+          <span class="pill pill-amber">Nice-to-haves</span>
+          <span class="pill pill-purple">src/scorer.js</span>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-num">03 — Materials Engine</div>
+        <div class="arch-title">Tailored application materials</div>
+        <div class="arch-desc">Calls Claude API to generate a tailored cover letter and resume bullet suggestions per role. Two voices: enterprise delivery (big tech, finance) or founder-operator (startups). Resume track auto-selected by role type.</div>
+        <div class="arch-pills">
+          <span class="pill pill-purple">Claude API</span>
+          <span class="pill pill-green">Enterprise voice</span>
+          <span class="pill pill-amber">Founder voice</span>
+        </div>
+      </div>
+
+      <div class="arch-card">
+        <div class="arch-num">04 — Tracker</div>
+        <div class="arch-title">Pipeline to offer</div>
+        <div class="arch-desc">Kanban board: Applied → Screening → Interview → Offer. Encrypted in localStorage. No backend. No database. Your applications are yours alone.</div>
+        <div class="arch-pills">
+          <span class="pill pill-green">Encrypted local</span>
+          <span class="pill pill-purple">src/store.js</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE SNIPPET -->
+    <div class="code-block">
+      <div class="code-topbar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="code-file">src/scorer.js — core scoring logic</span>
+      </div>
+<pre><span class="c-muted">// Every role starts at 0. Must-haves disqualify. Nice-to-haves add points.</span>
+
+<span class="c-blue">function</span> <span class="c-green">scoreJob</span>(job, criteria) {
+  <span class="c-muted">// 1. Check must-haves — fail fast</span>
+  <span class="c-blue">const</span> salary = <span class="c-green">extractSalary</span>(job.salary);
+  <span class="c-blue">if</span> (salary &lt; criteria.mustHave.minSalaryUSD) {
+    <span class="c-blue">return</span> { score: <span class="c-amber">0</span>, disqualified: <span class="c-amber">true</span> };
+  }
+
+  <span class="c-muted">// 2. Base score for passing all must-haves</span>
+  <span class="c-blue">let</span> score = <span class="c-amber">45</span>;
+
+  <span class="c-muted">// 3. Nice-to-haves add up to 55 more points</span>
+  <span class="c-blue">for</span> (<span class="c-blue">const</span> nic <span class="c-blue">of</span> criteria.niceToHave) {
+    <span class="c-blue">if</span> (<span class="c-green">matches</span>(job, nic)) score += nic.points;
+  }
+
+  <span class="c-muted">// 4. Detect cover letter voice + resume track</span>
+  <span class="c-blue">return</span> {
+    score: <span class="c-green">Math.min</span>(<span class="c-amber">100</span>, score),
+    voice: <span class="c-green">detectVoice</span>(job),
+    resumeTrack: <span class="c-green">detectResumeTrack</span>(job),
+  };
+}</pre>
+    </div>
+  </section>
+
+  <!-- DEMO PREVIEW -->
+  <section class="section" id="demo">
+    <div class="section-eyebrow">Live dashboard preview</div>
+    <h2>What you see inside</h2>
+    <p class="section-sub">Sample data — your real applications are password-protected.</p>
+
+    <div class="demo-window">
+      <div class="demo-topbar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="demo-url">cdavilarios.github.io/next-best-job/app.html</span>
+      </div>
+      <div class="demo-inner">
+        <div class="demo-sidebar">
+          <div class="d-logo">
+            <div class="d-logo-n">Claudia D.</div>
+            <div class="d-logo-s">Job Command Center</div>
+          </div>
+          <div class="d-nav active">◈ &nbsp;Dashboard</div>
+          <div class="d-nav">◎ &nbsp;Shortlist <span class="d-count">5</span></div>
+          <div class="d-nav">▦ &nbsp;Pipeline</div>
+          <div class="d-nav">◇ &nbsp;Criteria</div>
+          <div class="d-nav">＋ &nbsp;Add Role</div>
+        </div>
+        <div class="demo-main">
+          <div class="d-title">Good morning.</div>
+          <div class="d-sub">3 offers · $180K+ · NYC · June 15 deadline</div>
+          <div class="d-stats">
+            <div class="d-stat"><div class="d-stat-n">3</div><div class="d-stat-l">Applied</div></div>
+            <div class="d-stat"><div class="d-stat-n">1</div><div class="d-stat-l">Screening</div></div>
+            <div class="d-stat"><div class="d-stat-n">0</div><div class="d-stat-l">Interview</div></div>
+            <div class="d-stat"><div class="d-stat-n green">0</div><div class="d-stat-l">Offers</div></div>
+          </div>
+          <div class="d-job">
+            <div class="d-job-row">
+              <div><div class="d-job-title">Sr. PM, Applied AI — Google DeepMind</div><div class="d-job-co">New York, NY · $256K–$278K · Posted today</div></div>
+              <div class="d-score">92</div>
+            </div>
+            <div class="d-job-tags">
+              <span class="d-tag pill-green">Tier 1</span>
+              <span class="d-tag pill-blue">GenAI PM</span>
+              <span class="d-tag pill-amber">Apply today</span>
+            </div>
+          </div>
+          <div class="d-job">
+            <div class="d-job-row">
+              <div><div class="d-job-title">Digital Solutions Owner — Macquarie</div><div class="d-job-co">New York, NY · $260K–$290K</div></div>
+              <div class="d-score">81</div>
+            </div>
+            <div class="d-job-tags">
+              <span class="d-tag pill-green">Top comp</span>
+              <span class="d-tag pill-blue">Enterprise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section class="section" id="privacy">
+    <div class="section-eyebrow">Privacy model</div>
+    <h2>What's public. What's not.</h2>
+    <p class="section-sub">The code is open. Your data is yours.</p>
+
+    <table class="privacy-table">
+      <thead><tr><th>What</th><th>Where it lives</th><th>Who can see it</th></tr></thead>
+      <tbody>
+        <tr><td>Agent source code</td><td>GitHub (public)</td><td><span class="check">✓</span> Everyone — that's the point</td></tr>
+        <tr><td>Scoring criteria logic</td><td>GitHub (public)</td><td><span class="check">✓</span> Everyone</td></tr>
+        <tr><td>Your applications & pipeline</td><td>Browser localStorage</td><td><span class="lock">🔒</span> Only you (password-gated)</td></tr>
+        <tr><td>Your Anthropic API key</td><td>Browser localStorage</td><td><span class="lock">🔒</span> Only you, never logged</td></tr>
+        <tr><td>Your password</td><td>Never stored</td><td><span class="lock">🔒</span> Nobody — SHA-256 hash only</td></tr>
+        <tr><td>Your real preferences & salary</td><td>Not in this repo</td><td><span class="lock">🔒</span> Nobody</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- HOW TO USE -->
+  <section class="section" id="howto">
+    <div class="section-eyebrow">Run your own instance</div>
+    <h2>Fork and deploy in 5 minutes</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <div class="step-title">Fork this repo</div>
+          <div class="step-desc">Click Fork on GitHub. Name it anything. You get your own copy of the full agent.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <div class="step-title">Set your password hash</div>
+          <div class="step-desc">In <code>index.html</code>, find <code>PASSWORD_HASH</code> and replace it with the SHA-256 of your password.<br>Generate it: <code>echo -n "yourpassword" | sha256sum</code></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <div class="step-title">Edit your criteria</div>
+          <div class="step-desc">Open <code>src/criteria.js</code>. Set your salary floor, target locations, role types, and nice-to-haves. The scorer uses these weights automatically.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <div class="step-title">Enable GitHub Pages</div>
+          <div class="step-desc">Settings → Pages → Deploy from branch → <code>main</code> → <code>/ (root)</code> → Save. Live in ~2 minutes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <div class="step-title">(Optional) Add your Claude API key</div>
+          <div class="step-desc">In the private dashboard → Settings, paste your Anthropic API key. This enables live job scanning, scoring, and cover letter generation. Stored only in your browser.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        Built by <a href="https://linkedin.com/in/claudavilarios" target="_blank">Claudia Davila Rios</a> —
+        Cornell Tech MBA '26 · CPO, Sociate AI · formerly Rimac Seguros + Interbank
+      </div>
+      <div class="footer-right">
+        <a class="footer-link" href="https://github.com/cdavilarios/next-best-job" target="_blank">GitHub ↗</a>
+        <a class="footer-link" href="https://linkedin.com/in/claudavilarios" target="_blank">LinkedIn ↗</a>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:11px;color:var(--muted2)">Job listings retrieved via AI-powered search. Verify all details directly with employers before applying.</div>
+  </footer>
+</div>
+
+<!-- PASSWORD GATE -->
+<div class="gate-overlay" id="gate">
+  <div class="gate-box">
+    <button class="gate-close" onclick="closeGate()">×</button>
+    <div class="gate-title">Private dashboard</div>
+    <div class="gate-sub">Your applications, pipeline, and preferences. Password-protected — data never leaves your browser.</div>
+    <input class="gate-input" type="password" id="gate-pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()">
+    <div class="gate-err" id="gate-err"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="checkPw()">Enter dashboard →</button>
+  </div>
+</div>
+
+<script>
+// ── PASSWORD CHECK ──
+// SHA-256 hash of your password. Generate with:
+//   echo -n "yourpassword" | sha256sum
+// Then replace the string below with the hash (no spaces).
+// Default demo hash = "next-best-job" — CHANGE THIS before deploying your fork.
+const PASSWORD_HASH = "000e2c722b97fbe6c21bbf7e4d0761a6babe211634c17038416217e05220f500";
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function checkPw() {
+  const pw = document.getElementById("gate-pw").value;
+  if (!pw) { document.getElementById("gate-err").textContent = "Enter your password."; return; }
+  const hash = await sha256(pw);
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem("nbj_session", hash.slice(0, 32));
+    window.location.href = "app.html";
+  } else {
+    document.getElementById("gate-err").textContent = "Incorrect password.";
+    document.getElementById("gate-pw").value = "";
+    document.getElementById("gate-pw").focus();
+  }
+}
+
+function openGate() { document.getElementById("gate").classList.add("show"); setTimeout(()=>document.getElementById("gate-pw").focus(),200); }
+function closeGate() { document.getElementById("gate").classList.remove("show"); }
+document.getElementById("gate").addEventListener("click", e => { if(e.target===e.currentTarget) closeGate(); });
+</script>
+</body>
+</html>
